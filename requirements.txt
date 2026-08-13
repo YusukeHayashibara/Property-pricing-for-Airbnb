@@ -1,0 +1,35 @@
+# Core
+pandas>=2.0
+numpy>=1.24
+python-dotenv>=1.0
+requests>=2.31
+
+# Geospatial
+geopandas>=0.14
+shapely>=2.0
+folium>=0.15
+
+# Spatial analysis
+pysal>=24.1
+esda>=2.5
+libpysal>=4.9
+splot>=1.1
+
+# Modeling
+scikit-learn>=1.4
+statsmodels>=0.14
+
+# Visualization
+matplotlib>=3.8
+seaborn>=0.13
+
+# Notebooks
+jupyterlab>=4.0
+ipykernel>=6.29
+
+# Dev / quality
+black>=24.0
+flake8>=7.0
+isort>=5.13
+pytest>=8.0
+pytest-cov>=5.0

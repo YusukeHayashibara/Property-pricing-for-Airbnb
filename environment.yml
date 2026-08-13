@@ -1,0 +1,28 @@
+name: airbnb-pricing-rio
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pandas
+  - numpy
+  - geopandas
+  - shapely
+  - folium
+  - pysal
+  - esda
+  - libpysal
+  - splot
+  - scikit-learn
+  - statsmodels
+  - matplotlib
+  - seaborn
+  - jupyterlab
+  - ipykernel
+  - python-dotenv
+  - requests
+  - black
+  - flake8
+  - isort
+  - pytest
+  - pytest-cov
+  - pip
