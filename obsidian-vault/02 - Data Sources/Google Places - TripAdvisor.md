@@ -22,5 +22,5 @@ Density/quality of nearby points of interest feeds the tourist-appeal term in th
 
 ## Links
 
-- [[ISP-RJ]] — combined with tourist appeal and crime risk in the investment score
+- [[ISP]] — combined with tourist appeal and crime risk in the investment score
 - [[05 - Methodology]]

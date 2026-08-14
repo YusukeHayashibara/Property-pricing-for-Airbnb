@@ -4,7 +4,7 @@
 
 ## Phase 1 — Aggregation (Month 1)
 
-- Confirm current availability/format of each source: [[ITBI - Data.Rio]], [[FipeZAP]], [[Inside Airbnb]], [[Google Places - TripAdvisor]], [[ISP-RJ]].
+- Confirm current availability/format of each source: [[ITBI]], [[FipeZAP]], [[Inside Airbnb]], [[Google Places - TripAdvisor]], [[ISP]].
 - Collect, geocode, and integrate sources.
 - Clean and diagnose data quality.
 - **Milestone:** unified, geolocated dataset at microregion level.

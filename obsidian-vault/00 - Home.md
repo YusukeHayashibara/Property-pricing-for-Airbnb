@@ -1,4 +1,4 @@
-# Property Pricing for Airbnb — Rio de Janeiro
+# Property Pricing for Airbnb — São Paulo
 
 Shared knowledge base for the group. This vault is versioned in the same git repo as the code — see `../CONTRIBUTING.md` for how to sync it.
 
@@ -13,11 +13,11 @@ Shared knowledge base for the group. This vault is versioned in the same git rep
 
 ## Data sources
 
-- [[ITBI - Data.Rio]]
+- [[ITBI]]
 - [[FipeZAP]]
 - [[Inside Airbnb]]
 - [[Google Places - TripAdvisor]]
-- [[ISP-RJ]]
+- [[ISP]]
 
 ## Meetings
 

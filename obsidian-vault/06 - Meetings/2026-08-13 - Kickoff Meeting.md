@@ -14,7 +14,7 @@ attendees:
 ## Discussion
 
 - Repository scaffolded: `src/`, `data/`, `notebooks/`, `outputs/`, `docs/`, and this Obsidian vault for shared notes.
-- Reviewed the 5 data sources and their roles — see [[02 - Data Sources]] section notes: [[ITBI - Data.Rio]], [[FipeZAP]], [[Inside Airbnb]], [[Google Places - TripAdvisor]], [[ISP-RJ]].
+- Reviewed the 5 data sources and their roles — see [[02 - Data Sources]] section notes: [[ITBI]], [[FipeZAP]], [[Inside Airbnb]], [[Google Places - TripAdvisor]], [[ISP]].
 
 ## Decisions
 

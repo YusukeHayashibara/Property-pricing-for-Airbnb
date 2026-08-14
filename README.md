@@ -1,12 +1,14 @@
-# Property Pricing for Airbnb — Rio de Janeiro
+# Property Pricing for Airbnb — São Paulo
 
-Which properties for sale in the city of Rio de Janeiro are the best options to build an Airbnb? This project combines multiple data sources to score real estate by **return on investment adjusted for crime risk and tourist appeal**.
+Which properties for sale in the city of São Paulo are the best options to build an Airbnb? This project combines multiple data sources to score real estate by **return on investment adjusted for crime risk and tourist appeal**.
 
 Developed for **SSC0957 — Practical Data Science II**.
 
+> **Scope note (2026-08-14):** the project shifted from Rio de Janeiro to São Paulo, matching the Inside Airbnb data currently in use. `ITBI / Data.Rio` and `ISP-RJ` below are Rio-specific sources and still need São Paulo equivalents — tracked as open questions in the Obsidian vault (`obsidian-vault/02 - Data Sources/`).
+
 ## The question
 
-> Which regions and property profiles in Rio de Janeiro maximize the expected return of an Airbnb, once the return is adjusted for the surrounding crime risk and tourist attractiveness?
+> Which regions and property profiles in São Paulo maximize the expected return of an Airbnb, once the return is adjusted for the surrounding crime risk and tourist attractiveness?
 
 Rather than only listing cheap properties, the project treats the decision as a **spatial multi-criteria optimization**, following the causal chain:
 
