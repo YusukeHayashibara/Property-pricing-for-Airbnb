@@ -4,7 +4,7 @@ Which properties for sale in the city of São Paulo are the best options to buil
 
 Developed for **SSC0957 — Practical Data Science II**.
 
-> **Scope note (2026-08-14):** the project shifted from Rio de Janeiro to São Paulo, matching the Inside Airbnb data currently in use. `ITBI / Data.Rio` and `ISP-RJ` below are Rio-specific sources and still need São Paulo equivalents — tracked as open questions in the Obsidian vault (`obsidian-vault/02 - Data Sources/`).
+> **Scope note (2026-08-14):** the project shifted from Rio de Janeiro to São Paulo, matching the Inside Airbnb data currently in use. The cost source (formerly Data.Rio, ITBI's Rio portal) and risk source (formerly ISP-RJ) still need São Paulo equivalents — likely GeoSampa and SSP-SP respectively, but neither is confirmed yet. Tracked as open questions in the Obsidian vault (`obsidian-vault/02 - Data Sources/`).
 
 ## The question
 
@@ -20,11 +20,12 @@ cost → Airbnb revenue → tourist appeal → crime risk → investment score
 
 | Source | Role | What it provides |
 |--------|------|------------------|
-| ITBI / Data.Rio | Cost (base) | Real transaction prices per m², geolocated |
+| ITBI / GeoSampa (São Paulo equivalent, TBD) | Cost (base) | Real transaction prices per m², geolocated |
 | FipeZAP | Price validation | Historical price index and trend |
-| Inside Airbnb (Rio) | Revenue | Daily rate, estimated occupancy, listing attributes |
+| Inside Airbnb (São Paulo) | Revenue | Daily rate, estimated occupancy, listing attributes |
 | Google Places / TripAdvisor | Tourism | Points of interest, location, ratings |
-| ISP-RJ | Risk | Crime statistics by neighborhood / AISP |
+| Google Street View | Images of streets | Security analysis based in images |
+| SSP-SP (São Paulo equivalent, TBD) | Risk | Crime statistics by neighborhood / AISP |
 
 > **Note on real estate data:** ITBI and FipeZAP give price and location but not property attributes (bedrooms, area, etc.). The project therefore works at the **region + property-profile** level, using Inside Airbnb for attributes and ITBI/FipeZAP for the cost per m² of each microregion.
 
@@ -58,5 +59,5 @@ Work in progress. See the project timeline document for the 4-month plan and mil
 
 ## Notes
 
-- Confirm the current availability and format of each source (ITBI, ISP-RJ, Inside Airbnb) before starting, as coverage and formats change.
+- Confirm the current availability and format of each source (São Paulo ITBI/GeoSampa, SSP-SP, Inside Airbnb) before starting, as coverage and formats change.
 - Check the terms of use of any listing portal before automated collection.
