@@ -1,6 +1,6 @@
 # ZapImóveis — Avaliação de Web Scraping
 
-> Documento de avaliação, não uma fonte de dados ativa do projeto. Registra a análise de viabilidade de raspar anúncios do ZapImóveis como possível 6ª fonte, complementar às 5 já adotadas (ITBI/Data.Rio, FipeZAP, Inside Airbnb, Google Places/TripAdvisor, ISP-RJ).
+> Documento de avaliação. Registra a análise de viabilidade de raspar anúncios do ZapImóveis (ou alternativa) — usado não como fonte de treino do modelo, mas como etapa final de scoring de candidatos reais à venda (ver seção "Recomendação"), complementar às 5 fontes já adotadas (ITBI/Data.Rio, FipeZAP, Inside Airbnb, Google Places/TripAdvisor, ISP-RJ).
 
 ## Contexto
 
@@ -50,13 +50,16 @@ Nenhum dos dois é reutilizável "as-is": seletores de scraping ficam obsoletos 
 - Não é essencial para a pergunta de pesquisa como formulada hoje: o projeto já assume trabalhar em nível de "região + perfil de imóvel" justamente para contornar a ausência de atributos por imóvel (README, seção "Data sources"). Adicionar ZapImóveis mudaria a granularidade do modelo — é uma mudança de escopo metodológico, não apenas "mais um dado".
 - Dado o timeline apertado do curso e que as 5 fontes já cobrem a cadeia causal completa, ZapImóveis é um **enriquecimento opcional** (melhora a granularidade de "custo"), não um bloqueador.
 
-## Recomendação
+## Recomendação (atualizada em 2026-08-20)
 
-1. **Não é prioridade no momento.** As 5 fontes já documentadas cobrem a cadeia causal completa do projeto.
-2. **Se o time decidir seguir**, tratar como uma 6ª fonte com processo próprio:
-   - Definir objetivo claro (atributos por imóvel para complementar ITBI/FipeZAP), escopo de coleta restrito (só bairros/período relevantes ao estudo, volume pequeno) e política de não redistribuir o dataset bruto raspado.
-   - Revisar `robots.txt` e os Termos de Uso do Grupo ZAP antes de escrever qualquer código, e registrar a decisão (seguir com justificativa de uso acadêmico não-comercial, ou descartar).
+**Decisão do time:** ZapImóveis (ou alternativa como VivaReal/QuintoAndar) **é necessário**, mas apenas para uma etapa específica e pequena do pipeline — não como fonte de treino do modelo.
+
+O motivo: nenhuma das fontes de custo do projeto (ITBI, IPTU/Cadastro, FipeZAP, SECOVI — ver [[Alternative Property Value Sources - RJ]]) contém **anúncios ativos à venda**. Todas são histórico de transação, avaliação fiscal ou índice agregado. Como o objetivo final do projeto é sugerir **imóveis reais para compra** (não só um perfil abstrato de região+tipo), o pipeline precisa, ao final, de uma lista de candidatos reais à venda para aplicar o modelo — e só um portal de listagem fornece isso. Ver [[05 - Methodology]], seção "4. Final candidate scoring".
+
+1. **Escopo deliberadamente pequeno:** coleta pontual e não-recorrente (não um scraper contínuo), limitada às regiões/perfis já mais bem pontuados pelo modelo (etapas 1-3 da metodologia). Da ordem de dezenas de anúncios, não milhares.
+2. **Antes de codar:**
+   - Revisar `robots.txt` e os Termos de Uso do Grupo ZAP (e das alternativas VivaReal/QuintoAndar), e registrar a decisão de seguir com justificativa de uso acadêmico não-comercial.
+   - Nunca redistribuir os anúncios brutos coletados como dataset — usar apenas para gerar o score final; não versionar HTML/dados brutos no git (`data/` já está fora do versionamento).
    - Prototipar primeiro se existe endpoint JSON interno (inspecionar aba Network do navegador) antes de ir para Playwright/Selenium — evita adicionar dependência pesada ao `environment.yml` sem necessidade.
-   - Se implementado, seguir a convenção de módulo por fonte do projeto: `src/collection/zapimoveis.py`, com scraping desacoplado da limpeza (`src/cleaning/`).
-   - Manter coleta pequena e throttled, nunca versionar HTML/dados brutos raspados no git (`data/` já está fora do versionamento).
-3. Caso o time decida não usar ZapImóveis, este documento serve como registro da decisão e do porquê — evita reabrir a mesma pergunta mais adiante sem contexto.
+3. **Implementação:** módulo dedicado `src/collection/listings_snapshot.py` (não `zapimoveis.py` genérico), separado dos módulos de coleta das 5 fontes já validadas — sinaliza no código que essa fonte tem um perfil de risco/ToS diferente das demais e é usada só na etapa final, não no treino.
+4. As ressalvas técnicas (site dinâmico, anti-bot) e de ToS documentadas abaixo continuam válidas e se aplicam a este escopo reduzido.
