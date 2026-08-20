@@ -26,3 +26,5 @@ dependencies:
   - pytest
   - pytest-cov
   - pip
+  - pip:
+      - basedosdados>=2.0
