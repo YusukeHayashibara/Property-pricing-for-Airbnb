@@ -8,6 +8,8 @@ requests>=2.31
 geopandas>=0.14
 shapely>=2.0
 folium>=0.15
+pyproj>=3.6
+mapclassify>=2.6
 
 # Spatial analysis
 pysal>=24.1
