@@ -1,8 +1,8 @@
-# Spike: Spatial Aggregation Approaches
+# Feasibility Study: Spatial Aggregation
 
 **Date:** 2026-09-07
 **Branch:** `feature/spatial-aggregation`
-**Type:** Spike (feasibility probe — output is a recommendation, code is throwaway)
+**Type:** Feasibility study — output is a recommendation; the notebook code is exploratory/throwaway
 **Vault reference:** `obsidian-vault/09 - Spatial Aggregation.md`
 
 ## Question
@@ -25,13 +25,13 @@ Concretely:
 
 ## Output
 
-- One throwaway notebook: `notebooks/spatial_aggregation_spike.ipynb`.
+- One exploratory notebook: `notebooks/spatial_aggregation_study.ipynb`.
 - A `distrito`-level table with: median cost per m² (IPTU), estimated
   revenue (Airbnb), crime rate, POI density.
 - A short written recommendation per join (which route won, with the
   numbers), fed back into `obsidian-vault/09 - Spatial Aggregation.md`.
 
-## Probe plan
+## Test plan
 
 | Step | What | Success metric |
 |---|---|---|
@@ -48,13 +48,13 @@ Concretely:
 
 - **Google Places not wired up.** POI step uses OSM Overpass. Swap for
   Places once `GOOGLE_PLACES_API_KEY` is in `.env`.
-- **Population by distrito not in repo.** For the spike, crime "rate" is
+- **Population by distrito not in repo.** For the study, crime "rate" is
   per unit area (or raw count); true per-100k-inhabitants needs SEADE /
   IBGE Censo 2022 population and is out of scope here.
 - **IPTU vintage 2025 vs Airbnb snapshot 2026-06.** Not deflated in the
-  spike; FipeZAP deflator is a later pipeline concern.
+  study; FipeZAP deflator is a later pipeline concern.
 - **Environment.** Python 3.14, no conda. `geopandas` 1.1.4 installed ad
-  hoc for the spike; if this route is adopted, add it to
+  hoc for the study; if this route is adopted, add it to
   `environment.yml` / `requirements.txt` (already listed there).
 - **Nominatim usage policy.** Sample geocoding only (N≈500), 1 req/s,
   descriptive User-Agent. Not a bulk geocode.

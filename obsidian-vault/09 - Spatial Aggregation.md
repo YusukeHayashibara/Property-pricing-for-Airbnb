@@ -21,19 +21,19 @@ Read it and push back if the reasoning doesn't hold. Structure:
 1. **Why "distrito"** — the argument, and the units we rejected.
 2. **The crime problem** — the one weak spot, and the two ways to handle it.
 3. **Join key, source by source** — how each dataset connects to `distrito`.
-4. **Spike results (2026-09-07)** — we actually ran the joins; the numbers are here.
+4. **Study results (2026-09-07)** — we actually ran the joins; the numbers are here.
 5. **Next steps** and **What's still missing** — what to do from here.
 
 > **Decision to ratify at the next weekly sync:** distrito as the pipeline unit, and
 > default to crime treatment **A** (impute the DP rate) until Phase 2 says otherwise.
 > If nobody objects, it's settled.
 
-### How this was studied
+### How this was decided
 
-Brainstorming (2026-09-07) → classified as a **spike** (feasibility probe, throwaway
-code) → ran `notebooks/spatial_aggregation_spike.ipynb` on branch
-`feature/spatial-aggregation` → results written back here. Spec:
-`docs/superpowers/specs/2026-09-07-spatial-aggregation-spike.md`. No `src/` code was
+A short feasibility study (2026-09-07): the throwaway notebook
+`notebooks/spatial_aggregation_study.ipynb` on branch `feature/spatial-aggregation`
+tested whether the joins actually work; results are written back here. Spec:
+`docs/specs/2026-09-07-spatial-aggregation.md`. No `src/` code was
 written; that is a separate, later decision (see Next steps).
 
 ---
@@ -88,9 +88,9 @@ Default to (A); switch to (B) only if the Phase 2 representativeness check (belo
 - Property attributes (`room_type`, `bedrooms`, `accommodates`, `bathrooms`, …) feed the property-profile dimension, not the spatial key.
 
 ### IPTU-SP — cost
-- **Chosen route (spike-validated): `numero_contribuinte` (SQL) → `quadra_fiscal` → distrito.** The first 6 digits of the contribuinte number are the fiscal sector + block; join them to the GeoSampa `quadra_fiscal` polygons (64k of them), take each block's representative point, point-in-polygon to distrito. Maps **99.94%** of the 3.8M IPTU rows, covers all 96 distritos, needs **no geocoding**. Lookup cached as `data/external/quadra_to_distrito.csv`.
+- **Chosen route (study-validated): `numero_contribuinte` (SQL) → `quadra_fiscal` → distrito.** The first 6 digits of the contribuinte number are the fiscal sector + block; join them to the GeoSampa `quadra_fiscal` polygons (64k of them), take each block's representative point, point-in-polygon to distrito. Maps **99.94%** of the 3.8M IPTU rows, covers all 96 distritos, needs **no geocoding**. Lookup cached as `data/external/quadra_to_distrito.csv`.
 - Rejected: the `cep` route (never needed — SQL was cleaner) and the `bairro` route (free text, ~96k dirty values, 14% match).
-- Cost signal per distrito: median value per m², filtered to residential `finalidade_imovel` (filter already in `notebooks/iptu_analysis.ipynb`). Note the spike used `valor_construcao`, which is a *fiscal* value (~R$60/m² median) — not market price. The level needs FipeZAP calibration; the join itself is settled.
+- Cost signal per distrito: median value per m², filtered to residential `finalidade_imovel` (filter already in `notebooks/iptu_analysis.ipynb`). Note the study used `valor_construcao`, which is a *fiscal* value (~R$60/m² median) — not market price. The level needs FipeZAP calibration; the join itself is settled.
 
 ### SSP-SP — crime risk
 - Build a manual **DP → distrito crosswalk** (~94 rows). Start from the 94-entry dictionary already in `notebooks/crime_analysis.ipynb` and re-map it from the informal "perfil" labels to actual distrito names.
@@ -105,11 +105,11 @@ Default to (A); switch to (B) only if the Phase 2 representativeness check (belo
 
 ---
 
-## Spike results (2026-09-07)
+## Study results (2026-09-07)
 
-Feasibility probe run on branch `feature/spatial-aggregation`, notebook
-`notebooks/spatial_aggregation_spike.ipynb`, spec
-`docs/superpowers/specs/2026-09-07-spatial-aggregation-spike.md`.
+Feasibility study run on branch `feature/spatial-aggregation`, notebook
+`notebooks/spatial_aggregation_study.ipynb`, spec
+`docs/specs/2026-09-07-spatial-aggregation.md`.
 
 > #decision (2026-09-07): the distrito unit is **confirmed workable for cost and
 > revenue**. Crime remains the weak link and needs a hand-built crosswalk.
@@ -135,19 +135,19 @@ Route notes:
 
 Artifacts (all git-ignored under `data/`): `data/external/{distrito_municipal.geojson,
 quadra_fiscal.gpkg, quadra_to_distrito.csv, dp_to_distrito.csv, poi_by_distrito.csv}`,
-`data/interim/distrito_features_spike.csv`.
+`data/interim/distrito_features_study.csv`.
 
 ---
 
 ## Step-by-step execution
 
-1. **Acquire boundaries and lookups** (`data/external/`) — spike already cached these
+1. **Acquire boundaries and lookups** (`data/external/`) — study already cached these
    - GeoSampa WFS `geoportal:distrito_municipal` (96 polygons).
    - GeoSampa WFS `geoportal:quadra_fiscal` (64k polygons) → `quadra_to_distrito.csv`.
    - Population by distrito (SEADE or IBGE Censo 2022) — **still missing**.
 2. **Normalize each source to a `distrito` key** (`src/cleaning/`)
-   - `airbnb`: use `neighbourhood_cleansed` directly (spike: 100% = point-in-polygon).
-   - `iptu`: `numero_contribuinte`[:6] → `quadra_fiscal` → distrito (spike: 99.94%); residential filter; per-distrito median value/m².
+   - `airbnb`: use `neighbourhood_cleansed` directly (study: 100% = point-in-polygon).
+   - `iptu`: `numero_contribuinte`[:6] → `quadra_fiscal` → distrito (study: 99.94%); residential filter; per-distrito median value/m².
    - `crime`: hand-built reviewed `dp,distrito` lookup (geocoding is only a first draft); occurrences only; impute the ~25 DP-less distritos; per-distrito annual count.
    - Output: one tidy table per source, keyed by `distrito`.
 3. **Build the feature table** (`src/features/`)
@@ -166,7 +166,7 @@ quadra_fiscal.gpkg, quadra_to_distrito.csv, dp_to_distrito.csv, poi_by_distrito.
 
 ## Next steps — from here
 
-The spike answered "does the join work". It did, for cost and revenue. From here:
+The study answered "does the join work". It did, for cost and revenue. From here:
 
 1. **Ratify the decision** at the next weekly sync (distrito + crime treatment A default).
 2. **Fix the crime crosswalk** — the one real weakness. Build an explicit, reviewed
@@ -180,9 +180,9 @@ The spike answered "does the join work". It did, for cost and revenue. From here
    rates per 100k.
 5. **Close the crime open questions in [[ISP]]** — crime basket (violent vs property),
    time window (full-year 2025 vs trailing 12 months).
-6. **Decide whether to build the real `src/` pipeline** — promote the throwaway spike
+6. **Decide whether to build the real `src/` pipeline** — promote the exploratory study
    code into tested `src/cleaning/`, `src/features/`, `src/modeling/` packages. This is
-   an architectural decision and needs its own brainstorming → spec → plan. Could be
+   a bigger decision and needs its own design discussion before any coding. Could be
    sliced: `src/cleaning/` alone delivers the Phase 1 milestone (one clean
    `distrito`-keyed table per source).
 7. **Phase 2 representativeness check** (Moran/LISA, within- vs between-distrito
@@ -198,7 +198,7 @@ The spike answered "does the join work". It did, for cost and revenue. From here
 - [ ] Crime basket decided ([[ISP]])
 - [ ] Crime time window decided ([[ISP]])
 - [ ] FipeZAP deflation base chosen (IPTU 2025 ↔ Airbnb 2026-06)
-- [ ] Go / no-go on building `src/` (architectural brainstorm)
+- [ ] Go / no-go on building `src/` (needs a design discussion)
 - [ ] [[ITBI]] and [[ISP]] source notes updated to drop the Rio framing (data + EDA already in repo; only [[05 - Methodology]] decision log updated so far)
 
 ### Already done (2026-09-07)
@@ -208,7 +208,7 @@ The spike answered "does the join work". It did, for cost and revenue. From here
 - [x] GeoSampa layers downloaded and cached (`data/external/`)
 - [x] `quadra_to_distrito.csv` lookup built (IPTU → distrito)
 - [x] First-draft `dp_to_distrito.csv` crosswalk (geocoded, needs review)
-- [x] Spike notebook + spec committed to `feature/spatial-aggregation`
+- [x] Study notebook + spec committed to `feature/spatial-aggregation`
 
 ---
 
@@ -219,4 +219,4 @@ The spike answered "does the join work". It did, for cost and revenue. From here
 - [[04 - Timeline & Milestones]] — Phase 1 (aggregation) and Phase 2 (representativeness) milestones
 - Data source notes: [[Inside Airbnb]], [[ITBI]], [[ISP]], [[FipeZAP]], [[Google Places - TripAdvisor]]
 - EDA notebooks: `notebooks/airbnb_analysis.ipynb`, `notebooks/iptu_analysis.ipynb`, `notebooks/crime_analysis.ipynb`
-- Spike (branch `feature/spatial-aggregation`): `notebooks/spatial_aggregation_spike.ipynb`, spec `docs/superpowers/specs/2026-09-07-spatial-aggregation-spike.md`
+- Study (branch `feature/spatial-aggregation`): `notebooks/spatial_aggregation_study.ipynb`, spec `docs/specs/2026-09-07-spatial-aggregation.md`
