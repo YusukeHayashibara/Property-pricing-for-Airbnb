@@ -133,10 +133,13 @@ Notebook `notebooks/aggregation.ipynb` produces two git-ignored files:
 
 | File | Grain | Rows × cols |
 |---|---|---|
-| `data/processed/listings_aggregated.csv` | 1 listing | 42,354 × 28 |
-| `data/processed/distrito_features.csv` | 1 distrito | 96 × 8 |
+| `data/processed/listings_aggregated.csv` | 1 listing | 42,354 × ~188 |
+| `data/processed/distrito_features.csv` | 1 distrito | 96 × ~109 |
 
-Column dictionary: `docs/data-dictionary-aggregation.md`.
+Built **deliberately wide** (every derivable column kept — pruning is the next step).
+Distrito columns: meta (`regiao5/8`, `subprefeitura_cd`, `area_km2`), IPTU (`iptu_*`, 13),
+crime per category + totals + trend (`crime_*`, ~22), POI per category + densities
+(`poi_*` / `poidens_*`, ~71). Column dictionary: `docs/data-dictionary-aggregation.md`.
 
 Crime handling in this build: `dp_distrito_crosswalk.csv` (geocoded + 9 hand-mapped);
 the 25 distritos with no DP take their **nearest** distrito's value, flagged in

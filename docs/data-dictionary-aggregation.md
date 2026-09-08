@@ -4,45 +4,74 @@ Produced by `notebooks/aggregation.ipynb` (branch `feature/final-aggregation`).
 Both files are git-ignored (`data/processed/`). Spatial-unit rationale:
 `obsidian-vault/09 - Spatial Aggregation.md`.
 
+This build is **deliberately wide** — every column that could be derived is kept.
+Column selection / cleaning is the next step.
+
 ## `data/processed/listings_aggregated.csv`
 
-One row per Airbnb listing (42,354). The modeling table.
+One row per Airbnb listing (**42,354 × ~188**). The modeling table.
+= all non-empty `listings.csv` columns + `price_num` + every column of
+`distrito_features.csv`, joined on `distrito`.
 
-### Listing attributes (from Inside Airbnb `listings.csv`)
+### Listing attributes (~79 cols)
+
+Straight from Inside Airbnb `listings.csv` (13 always-empty columns dropped:
+`host_since`, `license`, `instant_bookable`, `neighbourhood`, …). See the Inside Airbnb
+data dictionary for these. Added:
 
 | Column | Meaning |
 |---|---|
-| `id` | Inside Airbnb listing id |
-| `name` | listing title |
-| `neighbourhood_cleansed` | distrito name as published by Inside Airbnb |
-| `neighbourhood_group_cleansed` | subprefeitura |
-| `latitude`, `longitude` | listing coordinates (obfuscated ~150 m by Inside Airbnb) |
-| `room_type`, `property_type` | listing type |
-| `accommodates`, `bedrooms`, `beds`, `bathrooms_text` | capacity |
-| `price_num` | nightly price in BRL, parsed from the `"$1.234,56"` string |
-| `minimum_nights` | minimum stay |
-| `availability_365` | nights available in the next 365 days |
-| `number_of_reviews`, `review_scores_rating` | review volume and score |
-| `estimated_occupancy_l365d` | Inside-Airbnb-modelled occupancy, last 365 days (proxy) |
-| `estimated_revenue_l365d` | Inside-Airbnb-modelled revenue, last 365 days (proxy) |
+| `price_num` | nightly price in BRL, parsed from the `price` string |
+| `distrito` | normalised distrito key (uppercase, no accents) — the join key |
 
-### Distrito context (broadcast onto every listing in the distrito)
+### Distrito features (~109 cols, constant within a distrito)
 
-| Column | Meaning | Source |
-|---|---|---|
-| `distrito` | normalised distrito key (uppercase, no accents) | join key |
-| `regiao` | one of the 5 macro-regions (`nm_regiao_05`) | GeoSampa |
-| `area_m2` | distrito area in m² | GeoSampa |
-| `iptu_venal_m2_median` | median residential venal value per m² — `(valor_terreno + valor_construcao) / area_construida`. **Fiscal value, well below market**; needs FipeZAP calibration | IPTU-SP 2025 |
-| `iptu_n_imoveis` | residential lots behind the median | IPTU-SP 2025 |
-| `crime_occurrences_2025` | total police occurrences in 2025 for the distrito's DP (mean if >1 DP maps in) | SSP-SP |
-| `crime_source` | `dp-direct` or `nearest-distrito-imputed` | — |
-| `poi_osm_n`, `poi_osm_per_km2` | OSM tourism/historic/leisure POI count and density — **placeholder** until Google Places | OpenStreetMap |
+**Meta**
+
+| Column | Meaning |
+|---|---|
+| `regiao5`, `regiao8` | 5- and 8-way macro-region of São Paulo |
+| `subprefeitura_cd` | subprefeitura code |
+| `area_km2` | distrito area |
+
+**IPTU-SP 2025** — residential lots only, `iptu_*` (13). Fiscal *venal* values —
+**below market**, need FipeZAP calibration.
+
+| Column | Meaning |
+|---|---|
+| `iptu_n` | residential lots behind the stats |
+| `iptu_venal_m2_median` / `_mean` / `_p25` / `_p75` | venal value per m² of built area = `(valor_terreno + valor_construcao) / area_construida` |
+| `iptu_terreno_m2_median` | land value per m² of land |
+| `iptu_constr_m2_median` | construction value per m² built |
+| `iptu_venal_total_median` | total venal value per lot |
+| `iptu_area_constr_median`, `iptu_area_terreno_median` | median areas (m²) |
+| `iptu_idade_median` | median building age (`ano − ano_construcao`) |
+| `iptu_pavimentos_median` | median number of floors |
+| `iptu_share_apto` | share of lots that are apartment/flat |
+
+**Crime (SSP-SP 2025)** — `crime_*` (~22). Per-DP mean of occurrences (occurrences
+only, "Nº DE VÍTIMAS" categories excluded).
+
+| Column | Meaning |
+|---|---|
+| `crime_<categoria>` | 2025 count for each `NATUREZA2` (e.g. `crime_furto_outros`, `crime_roubo_de_veiculo`, `crime_homicidio_doloso`, …) |
+| `crime_total` | sum of all categories |
+| `crime_patrimonial` | furto + roubo categories |
+| `crime_violento` | homicídio / latrocínio / lesão seguida de morte / tentativa / estupro / roubo |
+| `crime_total_2024` | same total for 2024 (trend) |
+| `crime_n_dp` | number of DPs mapped into the distrito |
+| `crime_source` | `dp-direct` or `nearest-imputed` (25 distritos with no DP inherit the nearest distrito's row) |
+
+**POI (OpenStreetMap, placeholder for Google Places)** — `poi_*` counts and
+`poidens_*` per-km² densities (~71). One pair per category:
+`tourism_museum`, `tourism_attraction`, `tourism_hotel`, `tourism_viewpoint`,
+`historic`, `leisure_park`, `amenity_restaurant`, `amenity_bar`, … plus `poi_total` /
+`poidens_total`.
 
 ## `data/processed/distrito_features.csv`
 
-One row per distrito (96), indexed by `distrito`. Same distrito-context columns as
-above. Secondary view for EDA, maps, and Phase 2 spatial checks.
+One row per distrito (**96 × ~109**), indexed by `distrito`. The distrito-feature block
+above on its own. Secondary view for EDA, maps, Phase 2 spatial checks.
 
 ## Known gaps
 
@@ -53,4 +82,5 @@ Tracked in `09 - Spatial Aggregation.md`:
 - No population → crime is a raw count, not a rate per 100k.
 - POI is OSM, not Google Places.
 - IPTU value is fiscal, not deflated market price.
-- Property-profile dimension not built yet (listing attributes are still raw).
+- Property-profile dimension not built yet (listing attributes still raw).
+- Column set is intentionally over-wide; needs pruning.
