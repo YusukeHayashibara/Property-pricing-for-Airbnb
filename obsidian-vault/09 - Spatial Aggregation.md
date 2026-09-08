@@ -82,16 +82,50 @@ Default to (A); switch to (B) only if the Phase 2 representativeness check (belo
 
 ---
 
+## Spike results (2026-09-07)
+
+Feasibility probe run on branch `feature/spatial-aggregation`, notebook
+`notebooks/spatial_aggregation_spike.ipynb`, spec
+`docs/superpowers/specs/2026-09-07-spatial-aggregation-spike.md`.
+
+> #decision (2026-09-07): the distrito unit is **confirmed workable for cost and
+> revenue**. Crime remains the weak link and needs a hand-built crosswalk.
+
+| Join | Winning route | Coverage | Confidence |
+|---|---|---|---|
+| Airbnb → distrito | `neighbourhood_cleansed` as-is | 100% (0 disagreements with point-in-polygon, 0 points outside) | high — Inside Airbnb already did the PIP against these exact boundaries |
+| IPTU → distrito | `numero_contribuinte`[:6] (fiscal sector+block) → GeoSampa `quadra_fiscal` polygon → point-in-polygon | 99.94% of 3.8M rows, 96/96 distritos, **no geocoding** | high |
+| Crime → distrito | hand-built + reviewed `dp,distrito` lookup | only ~71/96 distritos get a DP; ~25 need imputation | **low** |
+| POI → distrito | OSM Overpass (placeholder) | 69/96 non-zero, central-biased | low — Google Places still required |
+
+Route notes:
+- **IPTU `bairro` route is dead** — free text, ~96k dirty distinct values, 14% match.
+  The CEP route was not needed; the SQL route won outright.
+- **Crime**: DP labels are *not* a partition of the distritos. Name-matching covers
+  48/94; bounded Nominatim geocoding gets 85/94; 9 informal names hand-mapped (flagged
+  `manual-review` in the crosswalk). Treatment A (impute DP rate) vs B (sum DPs per
+  distrito) correlate only at **Spearman ρ ≈ 0.79** — the choice changes the ranking, so
+  it must be made deliberately in Phase 2.
+- **IPTU cost level is meaningless as-is** — `valor_construcao` is a fiscal value
+  (median ≈ R$60/m²), not market price. The join is validated; calibration is a later
+  FipeZAP concern.
+
+Artifacts (all git-ignored under `data/`): `data/external/{distrito_municipal.geojson,
+quadra_fiscal.gpkg, quadra_to_distrito.csv, dp_to_distrito.csv, poi_by_distrito.csv}`,
+`data/interim/distrito_features_spike.csv`.
+
+---
+
 ## Step-by-step execution
 
-1. **Acquire boundaries and lookups** (`data/external/`)
-   - GeoSampa: 96-distrito shapefile.
-   - GeoSampa: logradouros layer (for the CEP→distrito table) — or the "Lotes fiscais IPTU" layer if the fallback route is needed.
-   - Population by distrito (SEADE or IBGE Censo 2022).
+1. **Acquire boundaries and lookups** (`data/external/`) — spike already cached these
+   - GeoSampa WFS `geoportal:distrito_municipal` (96 polygons).
+   - GeoSampa WFS `geoportal:quadra_fiscal` (64k polygons) → `quadra_to_distrito.csv`.
+   - Population by distrito (SEADE or IBGE Censo 2022) — **still missing**.
 2. **Normalize each source to a `distrito` key** (`src/cleaning/`)
-   - `airbnb`: point-in-polygon validation of `neighbourhood_cleansed`.
-   - `iptu`: `cep` → distrito join; residential filter; per-distrito median `valor_m2_construcao`.
-   - `crime`: DP→distrito crosswalk; occurrences only; per-distrito annual count.
+   - `airbnb`: use `neighbourhood_cleansed` directly (spike: 100% = point-in-polygon).
+   - `iptu`: `numero_contribuinte`[:6] → `quadra_fiscal` → distrito (spike: 99.94%); residential filter; per-distrito median value/m².
+   - `crime`: hand-built reviewed `dp,distrito` lookup (geocoding is only a first draft); occurrences only; impute the ~25 DP-less distritos; per-distrito annual count.
    - Output: one tidy table per source, keyed by `distrito`.
 3. **Build the feature table** (`src/features/`)
    - Grain: `distrito × property_profile`.

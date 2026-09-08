@@ -8,6 +8,8 @@ dependencies:
   - geopandas
   - shapely
   - folium
+  - pyproj
+  - mapclassify
   - pysal
   - esda
   - libpysal
