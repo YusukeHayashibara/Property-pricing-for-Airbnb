@@ -16,7 +16,7 @@ cost → Airbnb revenue → tourist appeal → crime risk → investment score
 
 ## Known limitations
 
-- AISP boundaries don't necessarily align with neighborhood or ITBI microregion boundaries — spatial join/aggregation needed.
+- AISP / DP boundaries don't necessarily align with neighborhood or microregion boundaries — spatial join/aggregation needed. Approach settled: manual **DP → distrito** crosswalk, crime rate per 100k. See [[09 - Spatial Aggregation]] (incl. the granularity-ceiling treatment A vs B).
 - Reporting lag / underreporting is a known issue with public crime statistics generally — worth a caveat in the final report.
 
 ## Open questions

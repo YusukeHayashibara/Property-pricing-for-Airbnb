@@ -8,6 +8,7 @@ Shared knowledge base for the group. This vault is versioned in the same git rep
 - [[03 - Team & Roles]]
 - [[04 - Timeline & Milestones]]
 - [[05 - Methodology]]
+- [[09 - Spatial Aggregation]]
 - [[07 - Glossary]]
 - [[08 - References & Literature]]
 

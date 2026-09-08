@@ -28,7 +28,7 @@ See `notebooks/airbnb_analysis.ipynb` for the full exploratory analysis. Headlin
 ## Open questions
 
 - ~~Geographic scope mismatch~~ #decision (2026-08-14): confirmed — the project has shifted from Rio de Janeiro to **São Paulo**, matching this export's `neighbourhood_cleansed` values and coordinates. [[ITBI]] and [[ISP]] are Rio-specific sources and now need São Paulo equivalents — see the open question logged in each of those notes. See [[01 - Project Overview]] and the decision log in [[05 - Methodology]].
-- #open-question How do we spatially join Inside Airbnb listings to the (still-to-be-found) São Paulo cost/risk microregions?
+- ~~How do we spatially join Inside Airbnb listings to the São Paulo cost/risk microregions?~~ #decision (2026-09-07): common unit is the **distrito**; use `neighbourhood_cleansed` (native) validated by point-in-polygon. Full strategy: [[09 - Spatial Aggregation]].
 - ~~Which snapshot date(s) will we use?~~ Resolved for now: single snapshot, 2026-06-14/15/16 (see EDA summary above). Revisit if multi-snapshot trend data is added later.
 
 ## Links

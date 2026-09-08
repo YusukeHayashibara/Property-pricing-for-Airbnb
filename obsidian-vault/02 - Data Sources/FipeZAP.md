@@ -12,7 +12,7 @@ Cross-check/validate [[ITBI]] transaction prices and capture price trend over ti
 
 ## Open questions
 
-- #open-question Is the FipeZAP index available at neighborhood granularity for São Paulo, or only city-wide? (project scope shifted from Rio de Janeiro to São Paulo on 2026-08-14 — see [[01 - Project Overview]]; FipeZAP covers both cities so this source itself doesn't need replacing, just re-checking at the new city.)
+- ~~Is the FipeZAP index available at neighborhood granularity for São Paulo, or only city-wide?~~ #decision (2026-09-07): treat as city-wide / trend-only — it is a single global price-trend deflator, not a per-distrito cost input. See [[09 - Spatial Aggregation]].
 - #open-question Licensing/terms of use for redistribution in the project report.
 
 ## Links

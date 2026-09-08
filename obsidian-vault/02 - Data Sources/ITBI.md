@@ -20,6 +20,7 @@ Aggregated to microregion level to estimate **cost per m²**, combined with Fipe
 - #open-question **Scope mismatch:** the project shifted from Rio de Janeiro to **São Paulo** on 2026-08-14 (see [[01 - Project Overview]], decision log in [[05 - Methodology]]). Data.Rio is Rio de Janeiro's municipal open-data portal and does not cover São Paulo — this source needs a São Paulo equivalent for transaction-level ITBI data (e.g. the São Paulo municipal ITBI/GeoSampa data, TBD — not yet researched). Until replaced, this note and `DATA_RIO_BASE_URL` describe a source the project can no longer use as-is.
 - #open-question What's the most recent ITBI dataset vintage available on Data.Rio? (moot if replaced by a São Paulo source)
 - #open-question What geographic granularity does the portal expose (bairro? AISP? custom grid)?
+- Aggregation target settled: normalize to **distrito** via `cep` → distrito join (fallback: `numero_contribuinte` SQL → lot geometry). See [[09 - Spatial Aggregation]].
 
 ## Links
 
