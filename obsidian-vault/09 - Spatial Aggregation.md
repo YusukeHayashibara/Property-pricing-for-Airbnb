@@ -13,6 +13,29 @@ And the related open questions in [[ITBI]] (granularity of the cost source), [[I
 
 > #decision (2026-09-07): the common spatial unit for the whole pipeline is the **distrito** (São Paulo has 96). Every source is normalized to a `distrito` key before any feature is built. The investment score is produced at the `distrito × property-profile` level. Logged in [[05 - Methodology]].
 
+## For the team — what to review
+
+This note is the full record of how we picked the spatial unit for the pipeline.
+Read it and push back if the reasoning doesn't hold. Structure:
+
+1. **Why "distrito"** — the argument, and the units we rejected.
+2. **The crime problem** — the one weak spot, and the two ways to handle it.
+3. **Join key, source by source** — how each dataset connects to `distrito`.
+4. **Spike results (2026-09-07)** — we actually ran the joins; the numbers are here.
+5. **Next steps** and **What's still missing** — what to do from here.
+
+> **Decision to ratify at the next weekly sync:** distrito as the pipeline unit, and
+> default to crime treatment **A** (impute the DP rate) until Phase 2 says otherwise.
+> If nobody objects, it's settled.
+
+### How this was studied
+
+Brainstorming (2026-09-07) → classified as a **spike** (feasibility probe, throwaway
+code) → ran `notebooks/spatial_aggregation_spike.ipynb` on branch
+`feature/spatial-aggregation` → results written back here. Spec:
+`docs/superpowers/specs/2026-09-07-spatial-aggregation-spike.md`. No `src/` code was
+written; that is a separate, later decision (see Next steps).
+
 ---
 
 ## Why "distrito" is the right unit
@@ -65,9 +88,9 @@ Default to (A); switch to (B) only if the Phase 2 representativeness check (belo
 - Property attributes (`room_type`, `bedrooms`, `accommodates`, `bathrooms`, …) feed the property-profile dimension, not the spatial key.
 
 ### IPTU-SP — cost
-- **Primary route: `cep` → distrito.** Join the IPTU `cep` against a CEP→distrito table built from the GeoSampa logradouros layer (which carries both CEP and distrito). One join, no geocoding, no multi-million-row lot shapefile. Boundary error is under ~5% of lots and irrelevant at distrito-level aggregation.
-- **Fallback route: `numero_contribuinte` (SQL) → lot geometry.** Join the contribuinte number to the GeoSampa "Lotes fiscais IPTU" layer, then point-in-polygon to distrito. More exact, much heavier. Use only if the Phase 2 check shows CEP boundary leakage changes the cost ranking.
-- Cost signal per distrito: median `valor_m2_construcao` (already derived in `notebooks/iptu_analysis.ipynb`), filtered to residential `finalidade_imovel` (filter already in that notebook).
+- **Chosen route (spike-validated): `numero_contribuinte` (SQL) → `quadra_fiscal` → distrito.** The first 6 digits of the contribuinte number are the fiscal sector + block; join them to the GeoSampa `quadra_fiscal` polygons (64k of them), take each block's representative point, point-in-polygon to distrito. Maps **99.94%** of the 3.8M IPTU rows, covers all 96 distritos, needs **no geocoding**. Lookup cached as `data/external/quadra_to_distrito.csv`.
+- Rejected: the `cep` route (never needed — SQL was cleaner) and the `bairro` route (free text, ~96k dirty values, 14% match).
+- Cost signal per distrito: median value per m², filtered to residential `finalidade_imovel` (filter already in `notebooks/iptu_analysis.ipynb`). Note the spike used `valor_construcao`, which is a *fiscal* value (~R$60/m² median) — not market price. The level needs FipeZAP calibration; the join itself is settled.
 
 ### SSP-SP — crime risk
 - Build a manual **DP → distrito crosswalk** (~94 rows). Start from the 94-entry dictionary already in `notebooks/crime_analysis.ipynb` and re-map it from the informal "perfil" labels to actual distrito names.
@@ -141,17 +164,51 @@ quadra_fiscal.gpkg, quadra_to_distrito.csv, dp_to_distrito.csv, poi_by_distrito.
 
 ---
 
-## Gaps — must close before or during execution
+## Next steps — from here
 
-- **Google Places / TripAdvisor data not collected yet.** The tourist-appeal term of the score has no input. Blocks step 3's POI column and step 5. See [[Google Places - TripAdvisor]] (POI categories and API-key ownership still open).
-- **Population by distrito not in the repo.** Needed to turn crime counts into rates (step 2, `crime`). Source: SEADE or IBGE Censo 2022.
-- **GeoSampa layers not downloaded.** Distrito shapefile, logradouros/CEP layer, and (conditionally) the IPTU lot layer. All of step 1.
-- **DP→distrito crosswalk does not exist as data.** Only an informal per-"perfil" dictionary in the crime notebook. Must be rebuilt as an explicit `dp,distrito` lookup and reviewed for the DPs that span multiple distritos.
-- **Crime basket undecided.** Which categories count toward guest-safety risk — open question in [[ISP]].
-- **Crime time window undecided.** `data/raw/ISP/` has all 12 months of 2025; the notebook currently uses a single combined file. Decide: full-year 2025 total, or trailing 12 months. Open question in [[ISP]].
-- **IPTU vintage vs Airbnb snapshot.** IPTU is 2025, Airbnb snapshot is 2026-06. FipeZAP deflator handles the price-level gap but the choice of deflation base needs to be logged.
-- **`src/` does not exist yet.** No `cleaning`, `features`, `modeling`, or `visualization` packages — steps 2–5 all start from an empty `src/`.
-- **Vault vs repo drift.** [[ITBI]] and [[ISP]] notes still describe the Rio sources as current and the SP replacements as "not yet researched", though IPTU-SP and SSP-SP data and EDA notebooks are already in the repo. Decision-log entries added to [[05 - Methodology]] on 2026-09-07; the source notes themselves still need updating.
+The spike answered "does the join work". It did, for cost and revenue. From here:
+
+1. **Ratify the decision** at the next weekly sync (distrito + crime treatment A default).
+2. **Fix the crime crosswalk** — the one real weakness. Build an explicit, reviewed
+   94-row `dp,distrito` table (start from `data/external/dp_to_distrito.csv`, review
+   every row, replace the 9 `manual-review` guesses, decide how to fill the ~25
+   distritos with no DP: nearest neighbour, or subprefectura average).
+3. **Get Google Places** — obtain `GOOGLE_PLACES_API_KEY`, decide POI categories that
+   count as tourist appeal (open in [[Google Places - TripAdvisor]]), collect for SP,
+   replace the OSM placeholder.
+4. **Get population by distrito** (SEADE or IBGE Censo 2022) so crime counts become
+   rates per 100k.
+5. **Close the crime open questions in [[ISP]]** — crime basket (violent vs property),
+   time window (full-year 2025 vs trailing 12 months).
+6. **Decide whether to build the real `src/` pipeline** — promote the throwaway spike
+   code into tested `src/cleaning/`, `src/features/`, `src/modeling/` packages. This is
+   an architectural decision and needs its own brainstorming → spec → plan. Could be
+   sliced: `src/cleaning/` alone delivers the Phase 1 milestone (one clean
+   `distrito`-keyed table per source).
+7. **Phase 2 representativeness check** (Moran/LISA, within- vs between-distrito
+   variance) — this is where the crime treatment A-vs-B and the score design get
+   validated.
+
+## What's still missing — checklist
+
+- [ ] Decision ratified by the team
+- [ ] Reviewed `dp,distrito` crosswalk (94 rows) + imputation rule for DP-less distritos
+- [ ] `GOOGLE_PLACES_API_KEY` + POI category list + collected Places data for SP
+- [ ] Population by distrito (SEADE / IBGE 2022)
+- [ ] Crime basket decided ([[ISP]])
+- [ ] Crime time window decided ([[ISP]])
+- [ ] FipeZAP deflation base chosen (IPTU 2025 ↔ Airbnb 2026-06)
+- [ ] Go / no-go on building `src/` (architectural brainstorm)
+- [ ] [[ITBI]] and [[ISP]] source notes updated to drop the Rio framing (data + EDA already in repo; only [[05 - Methodology]] decision log updated so far)
+
+### Already done (2026-09-07)
+
+- [x] Spatial unit chosen and justified (this note)
+- [x] Join routes validated for Airbnb, IPTU, POI; crime route scoped
+- [x] GeoSampa layers downloaded and cached (`data/external/`)
+- [x] `quadra_to_distrito.csv` lookup built (IPTU → distrito)
+- [x] First-draft `dp_to_distrito.csv` crosswalk (geocoded, needs review)
+- [x] Spike notebook + spec committed to `feature/spatial-aggregation`
 
 ---
 
@@ -161,4 +218,5 @@ quadra_fiscal.gpkg, quadra_to_distrito.csv, dp_to_distrito.csv, poi_by_distrito.
 - [[01 - Project Overview]] — region + property-profile framing
 - [[04 - Timeline & Milestones]] — Phase 1 (aggregation) and Phase 2 (representativeness) milestones
 - Data source notes: [[Inside Airbnb]], [[ITBI]], [[ISP]], [[FipeZAP]], [[Google Places - TripAdvisor]]
-- Notebooks: `notebooks/airbnb_analysis.ipynb`, `notebooks/iptu_analysis.ipynb`, `notebooks/crime_analysis.ipynb`
+- EDA notebooks: `notebooks/airbnb_analysis.ipynb`, `notebooks/iptu_analysis.ipynb`, `notebooks/crime_analysis.ipynb`
+- Spike (branch `feature/spatial-aggregation`): `notebooks/spatial_aggregation_spike.ipynb`, spec `docs/superpowers/specs/2026-09-07-spatial-aggregation-spike.md`
