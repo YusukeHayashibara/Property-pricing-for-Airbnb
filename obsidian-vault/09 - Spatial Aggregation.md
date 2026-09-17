@@ -121,6 +121,31 @@ Feasibility study run on branch `feature/spatial-aggregation`, notebook
 | Crime → distrito | hand-built + reviewed `dp,distrito` lookup | only ~71/96 distritos get a DP; ~25 need imputation | **low** |
 | POI → distrito | OSM Overpass (placeholder) | 69/96 non-zero, central-biased | low — Google Places still required |
 
+## Aggregation output (2026-09-08, branch `feature/final-aggregation`)
+
+> #decision (2026-09-08, with Yusuke): the **modeling table is at listing grain** —
+> one row per Airbnb listing, with crime / IPTU / POI attached as columns of the
+> listing's distrito. The per-distrito table is a secondary EDA / maps view. Both are
+> the same join; the study aggregated to distrito only to validate the join and draw
+> the maps.
+
+Notebook `notebooks/aggregation.ipynb` produces two git-ignored files:
+
+| File | Grain | Rows × cols |
+|---|---|---|
+| `data/processed/listings_aggregated.csv` | 1 listing | 42,354 × ~188 |
+| `data/processed/distrito_features.csv` | 1 distrito | 96 × ~109 |
+
+Built **deliberately wide** (every derivable column kept — pruning is the next step).
+Distrito columns: meta (`regiao5/8`, `subprefeitura_cd`, `area_km2`), IPTU (`iptu_*`, 13),
+crime per category + totals + trend (`crime_*`, ~22), POI per category + densities
+(`poi_*` / `poidens_*`, ~71). Column dictionary: `docs/data-dictionary-aggregation.md`.
+
+Crime handling in this build: `dp_distrito_crosswalk.csv` (geocoded + 9 hand-mapped);
+the 25 distritos with no DP take their **nearest** distrito's value, flagged in
+`crime_source`. This is a placeholder — the crosswalk still needs the team's manual
+review and a real imputation rule.
+
 Route notes:
 - **IPTU `bairro` route is dead** — free text, ~96k dirty distinct values, 14% match.
   The CEP route was not needed; the SQL route won outright.
@@ -208,7 +233,10 @@ The study answered "does the join work". It did, for cost and revenue. From here
 - [x] GeoSampa layers downloaded and cached (`data/external/`)
 - [x] `quadra_to_distrito.csv` lookup built (IPTU → distrito)
 - [x] First-draft `dp_to_distrito.csv` crosswalk (geocoded, needs review)
-- [x] Study notebook + spec committed to `feature/spatial-aggregation`
+- [x] Study notebook + spec committed to `feature/spatial-aggregation` (PR #2)
+- [x] Grain decided with the team: listing-level modeling table (2026-09-08)
+- [x] `notebooks/aggregation.ipynb` + `data/processed/{listings_aggregated,distrito_features}.csv` (branch `feature/final-aggregation`)
+- [x] Data dictionary: `docs/data-dictionary-aggregation.md`
 
 ---
 
