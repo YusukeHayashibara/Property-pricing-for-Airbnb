@@ -19,6 +19,7 @@ splot>=1.1
 
 # Modeling
 scikit-learn>=1.4
+pyarrow>=14.0
 statsmodels>=0.14
 
 # Visualization
