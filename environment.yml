@@ -15,6 +15,7 @@ dependencies:
   - libpysal
   - splot
   - scikit-learn
+  - pyarrow
   - statsmodels
   - matplotlib
   - seaborn
