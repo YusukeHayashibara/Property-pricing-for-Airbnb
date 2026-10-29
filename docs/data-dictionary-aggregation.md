@@ -63,10 +63,12 @@ only, "Nº DE VÍTIMAS" categories excluded).
 | `crime_source` | `dp-direct` or `nearest-imputed` (25 distritos with no DP inherit the nearest distrito's row) |
 
 **POI (OpenStreetMap, placeholder for Google Places)** — `poi_*` counts and
-`poidens_*` per-km² densities (~71). One pair per category:
+`poidens_*` per-km² densities (70). One pair per category:
 `tourism_museum`, `tourism_attraction`, `tourism_hotel`, `tourism_viewpoint`,
 `historic`, `leisure_park`, `amenity_restaurant`, `amenity_bar`, … plus `poi_total` /
 `poidens_total`.
+Only 90 of 96 distritos had OSM POIs; the other 6 are filled with 0, which may be
+missing data rather than a true absence of POIs.
 
 ## `data/processed/distrito_features.csv`
 
