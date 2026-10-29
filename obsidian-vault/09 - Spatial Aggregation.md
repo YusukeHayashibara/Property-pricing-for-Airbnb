@@ -235,6 +235,12 @@ The study answered "does the join work". It did, for cost and revenue. From here
 - [ ] Go / no-go on building `src/` (needs a design discussion)
 - [ ] [[ITBI]] and [[ISP]] source notes updated to drop the Rio framing (data + EDA already in repo; only [[05 - Methodology]] decision log updated so far)
 
+### Status (2026-10-28)
+
+- Wide aggregation build merged to `main` (PR #3, plus PR #4 with bairro standardization and docs fixes): `notebooks/aggregation.ipynb` → `listings_aggregated.csv` (42,354 × 188) and `distrito_features.csv` (96 × 109). Dictionary: `docs/data-dictionary-aggregation.md`.
+- The checklist above is the **next step**. It is tracked on branch `feature/aggregation-open-items` (focus note: `docs/notes/aggregation-open-items.md`).
+- Known caveats: `aggregation.ipynb` does not use `src/bairros.py` yet; processed CSVs not regenerated since 2026-09-08; 6 distritos have no OSM POIs (filled with 0).
+
 ### Already done (2026-09-07)
 
 - [x] Spatial unit chosen and justified (this note)
