@@ -149,6 +149,15 @@ review and a real imputation rule.
 Route notes:
 - **IPTU `bairro` route is dead** — free text, ~96k dirty distinct values, 14% match.
   The CEP route was not needed; the SQL route won outright.
+  #decision (2026-10-28): for **EDA only** (`notebooks/iptu_analysis.ipynb`, rankings by
+  bairro), `bairro` is standardized into `bairro_limpo` by `src/bairros.py`: accents,
+  punctuation and abbreviations (JD/VL/STA/CJ HAB...) normalized, hand-curated spelling
+  synonyms (`data/reference/bairros_sinonimos.csv`), and non-bairros dropped (TORRE/BLOCO/ED/
+  COND..., addresses, unit complements, blank, `data/reference/bairros_blocklist.csv`).
+  ~35% of residential rows have a blank `bairro` and ~15% are complements, so only ~48%
+  keep a bairro. Merge candidates come from `propor_sinonimos()` (one-letter
+  rule) and are reviewed by hand — VILA MARIA/MARIANA-style pairs are never auto-merged.
+  Modeling stays on `distrito`.
 - **Crime**: DP labels are *not* a partition of the distritos. Name-matching covers
   48/94; bounded Nominatim geocoding gets 85/94; 9 informal names hand-mapped (flagged
   `manual-review` in the crosswalk). Treatment A (impute DP rate) vs B (sum DPs per

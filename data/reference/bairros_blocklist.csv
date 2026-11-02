@@ -1,0 +1,28 @@
+# Valores do campo bairro do IPTU-SP que nao sao bairro e escapam das regras de
+# src/bairros.py (motivo_descarte). Curado a mao; normalizado antes do uso.
+bairro
+CONJUNTO RESIDENCIAL
+# empreendimentos/condominios que aparecem nos rankings de mediana
+MELIA CONFORT IGUATEMI
+MELIA CONFORT BERRINI
+BELINT BELA CINTRA
+SAO PAULO FASHION HALL
+SKY PAULICEIA
+AMPLIFY MOEMA
+AMPM RESIDENCIAL
+IS LIBERDADE
+CONEXAO URBANA
+VIVAZ JARDIM PRUDENCIA
+COSMOPOLITAN
+LES JARDINS CHACARA FLORA
+RESERVA GRANJA JULIETA
+# fragmentos (nome truncado)
+CARLOS
+ACEDONIA
+CEDONIA
+ARILIA
+RILIA
+UARANI
+ARANI
+OLONIAL
+OROTEIA
