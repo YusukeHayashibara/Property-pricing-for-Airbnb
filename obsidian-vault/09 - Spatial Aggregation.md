@@ -249,6 +249,10 @@ The study answered "does the join work". It did, for cost and revenue. From here
 - Sensitivity of the crime ranking to the open choices (basket, window, denominator, A/B, imputation): `docs/crime-sensitivity.md`. Window is irrelevant (ρ ≥ 0.99); basket matters only property vs person (ρ = 0.69); the denominator is the other big lever. With the reviewed crosswalk, treatment A vs B correlate at ρ = 0.94 (draft: 0.88), so the "ρ ≈ 0.79" quoted above is outdated.
 - Still open: imputation rule for DP-less distritos, map check of 13 weaker rows, processed CSVs were regenerated with the new crosswalk (git-ignored, rerun `aggregation.ipynb` locally).
 
+### Update (2026-11-03) — spatial EDA
+
+- Phase 2 exploratory spatial analysis on the distrito polygons with PySAL: `notebooks/eda_espacial.ipynb`, findings in `docs/eda-espacial.md`. Highlights: every variable is positively autocorrelated (Moran I from 0.30 for revenue to 0.77 for listing density) regardless of the weights; crime is not associated with the price premium (bivariate I = 0.00) nor with revenue once POI is in the model; the distrito explains only 4% of the variance of listing revenue (η²), so most variation is within distritos. Caveat: 20 distritos have imputed crime.
+
 ### Already done (2026-09-07)
 
 - [x] Spatial unit chosen and justified (this note)
