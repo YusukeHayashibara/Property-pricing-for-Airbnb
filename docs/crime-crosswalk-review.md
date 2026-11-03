@@ -24,7 +24,7 @@ Para cada uma das 94 DPs da base de crime (`DP` = `NNN DP - Bairro`):
    - sem geocódigo utilizável (avenida longa, sem nó OSM) → mantém, justificando pelo **bairro** estar dentro do distrito;
    - dúvida real → **mantém e marca** `kept-ambiguous`.
 
-Cada linha tem a evidência escrita em `data/reference/dp_distrito_crosswalk.csv` (colunas `bairro, distrito, review_status, evidence`). Esse é o arquivo versionado e a fonte de verdade; o notebook `aggregation.ipynb` o lê direto.
+Cada linha tem a evidência escrita em `data/reference/dp_distrito_crosswalk.csv` (colunas `bairro, distrito, distrito_rascunho, review_status, evidence`; `distrito_rascunho` guarda o valor antigo para comparação). Esse é o arquivo versionado e a fonte de verdade; o notebook `aggregation.ipynb` o lê direto.
 
 ## 3. Resultado
 
@@ -79,6 +79,12 @@ Comparação dos dois rankings de crime por distrito:
 - Maior mudança: Santo Amaro, **70 posições**.
 - Top-10 em comum: **8 de 10**.
 
+![Crime por distrito: rascunho vs revisado](../outputs/crime_crosswalk_antes_depois.png)
+
+Figura: `outputs/crime_crosswalk_antes_depois.png`. Ranking completo por distrito: `outputs/crime_crosswalk_ranking.csv`. Reprodução: `python scripts/plot_crime_before_after.py`. Hachura = distrito imputado pelo vizinho mais próximo.
+
+Maiores mudanças de posição no ranking de crime: Santo Amaro (+70), Vila Guilherme (+58), Limão (−47), Mooca (+36), Tremembé (+35), José Bonifácio (−30).
+
 Leitura: um erro de 23% no mapeamento reordena o ranking de risco de forma material. Santo Amaro estava com o crime do Jardim São Luís, e Brás, Santana e Penha passam a ser lidos a partir dos vizinhos.
 
 ## 4. Limitações (importante dizer na apresentação)
@@ -104,7 +110,7 @@ Leitura: um erro de 23% no mapeamento reordena o ranking de risco de forma mater
 2. **Rascunho automático.** Geocodificar o nome do bairro da DP. Dois exemplos errados: "Santo Amaro" caiu no Jardim São Luís; "Vila Rica" caiu em Jaraguá, do outro lado da cidade (o certo é Aricanduva).
 3. **Método de verificação.** Diagrama: número da DP → endereço oficial + nó OSM → ponto em polígono → regra de decisão (seção 2).
 4. **Resultado.** 22/94 (23%) erradas. Gráfico: barras por status (seção 3).
-5. **Impacto.** Spearman 0,86; 22 distritos mudam ≥10 posições; Santo Amaro muda 70. Mapa antes/depois do crime por distrito (a gerar: o notebook já foi reexecutado).
+5. **Impacto.** Spearman 0,86; 22 distritos mudam ≥10 posições; Santo Amaro muda 70. Figura `outputs/crime_crosswalk_antes_depois.png` (três painéis: rascunho, revisado, mudança de posição).
 6. **Limitações honestas.** Sede ≠ circunscrição; 20 distritos imputados; cinco distritos sem DP próprio.
 7. **População e taxa por 100 mil.** Fonte IBGE 2022, 96/96, 11,45 milhões. Aviso sobre população flutuante no centro.
 8. **Próximos passos.** Regra de imputação; cesta de crimes e janela de tempo; Google Places; deflator FipeZAP.

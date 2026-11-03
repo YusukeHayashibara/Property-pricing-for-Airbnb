@@ -15,6 +15,7 @@ Source of the list: `obsidian-vault/09 - Spatial Aggregation.md` (checklist at t
         Method + evidence + slide outline: `docs/crime-crosswalk-review.md`
         Distritos with a direct DP: 71 → 76 (20 still imputed). Notebook rerun and
         CSVs regenerated on 2026-11-03 (they are git-ignored: rerun locally).
+  - [x] Before/after crime map for the slides: `outputs/crime_crosswalk_antes_depois.png`
   - [ ] Imputation rule for the 20 DP-less distritos (still nearest-neighbour)
   - [ ] Map check of the 13 weaker rows (`reviewed-bairro`, `kept-ambiguous`)
   - [x] Population by distrito: `data/external/populacao_distrito_2022.csv`
