@@ -1,0 +1,97 @@
+distrito,pop_2022,posicao_base,posicao_mediana,posicao_min,posicao_max,pct_configs_no_top_quartil,faixa,classe
+PARI,17359,1,1.5,1,6,100.0,5,risco alto robusto
+SE,23832,3,2.0,1,3,100.0,2,risco alto robusto
+BRAS,38750,3,3.0,2,23,100.0,21,risco alto robusto
+REPUBLICA,60825,3,3.25,2,10,100.0,8,risco alto robusto
+CONSOLACAO,53144,6,6.0,3,23,100.0,20,risco alto robusto
+SANTA CECILIA,80972,17,6.0,2,27,98.0,25,risco alto robusto
+BELA VISTA,60024,15,7.5,3,34,96.0,31,risco alto robusto
+PINHEIROS,65145,5,9.0,3,53,90.0,50,risco alto robusto
+PERDIZES,102391,9,10.0,3,57,90.0,54,risco alto robusto
+LIBERDADE,66056,15,13.5,3,39,90.0,36,risco alto robusto
+VILA GUILHERME,52587,7,14.5,7,37,85.0,30,sensivel as escolhas
+CAMBUCI,45163,13,14.5,3,28,98.0,25,risco alto robusto
+BARRA FUNDA,33436,9,16.0,5,54,80.0,49,sensivel as escolhas
+JARDIM PAULISTA,81859,14,17.0,10,77,68.0,67,sensivel as escolhas
+ALTO DE PINHEIROS,37359,18,20.25,8,85,56.0,77,sensivel as escolhas
+ARTUR ALVIM,95575,36,21.0,3,50,66.0,47,sensivel as escolhas
+BOM RETIRO,33520,11,21.0,9,75,56.0,66,sensivel as escolhas
+TATUAPE,98601,32,22.5,6,63,50.0,57,sensivel as escolhas
+VILA MARIANA,127286,35,24.0,12,85,55.0,73,sensivel as escolhas
+ITAIM BIBI,101452,25,24.0,9,77,56.0,68,sensivel as escolhas
+MOEMA,81899,25,24.0,9,84,53.0,75,sensivel as escolhas
+CASA VERDE,80536,23,26.5,14,45,46.0,31,sensivel as escolhas
+LAPA,75533,18,28.0,13,85,28.0,72,sensivel as escolhas
+JAGUARE,55382,20,28.5,15,68,44.0,53,sensivel as escolhas
+SANTO AMARO,85349,12,29.0,7,84,40.0,77,sensivel as escolhas
+MOOCA,80880,37,29.5,4,74,48.0,70,sensivel as escolhas
+IPIRANGA,116271,39,31.0,13,67,17.0,54,sensivel as escolhas
+CAMPO LIMPO,236162,43,31.0,9,73,38.0,64,sensivel as escolhas
+CANGAIBA,141172,33,32.5,9,48,22.0,39,sensivel as escolhas
+PONTE RASA,89881,33,32.75,8,49,28.0,41,sensivel as escolhas
+VILA SONIA,123748,40,33.0,13,81,16.0,68,sensivel as escolhas
+VILA ANDRADE,168669,40,33.0,10,81,22.0,71,sensivel as escolhas
+VILA LEOPOLDINA,46875,20,33.5,19,71,19.0,52,sensivel as escolhas
+SANTANA,115689,7,34.0,7,78,44.0,71,sensivel as escolhas
+CAPAO REDONDO,270767,56,36.5,9,64,24.0,55,sensivel as escolhas
+SAO MIGUEL,81011,29,37.0,16,51,4.0,35,risco baixo robusto
+MORUMBI,43690,25,37.5,9,77,28.0,68,sensivel as escolhas
+CAMPO BELO,71034,38,39.0,19,90,4.0,71,risco baixo robusto
+BUTANTA,51715,22,39.5,9,86,35.0,77,sensivel as escolhas
+PENHA,132452,46,40.5,10,70,8.0,60,risco baixo robusto
+LIMAO,82373,42,42.0,22,62,1.0,40,risco baixo robusto
+ANHANGUERA,75360,27,42.5,3,81,15.0,78,sensivel as escolhas
+PERUS,87716,27,42.5,3,81,15.0,78,sensivel as escolhas
+JAGUARA,24730,44,43.5,15,64,36.0,49,sensivel as escolhas
+GUAIANASES,109316,51,45.0,17,58,6.0,41,risco baixo robusto
+ARICANDUVA,89574,50,46.0,14,66,16.0,52,sensivel as escolhas
+VILA MATILDE,103558,46,47.5,36,73,0.0,37,risco baixo robusto
+PARQUE DO CARMO,74677,31,50.0,10,79,12.0,69,sensivel as escolhas
+SAO LUCAS,138038,75,50.0,18,83,5.0,65,risco baixo robusto
+SAO MATEUS,155682,52,50.5,24,64,0.0,40,risco baixo robusto
+VILA JACUI,134189,61,51.0,19,74,4.0,55,risco baixo robusto
+LAJEADO,164391,74,52.0,15,80,10.0,65,risco baixo robusto
+VILA PRUDENTE,105690,49,52.0,40,88,0.0,48,risco baixo robusto
+SAO DOMINGOS,88884,44,52.0,34,65,0.0,31,risco baixo robusto
+VILA MEDEIROS,114939,53,52.25,15,85,4.0,70,risco baixo robusto
+BELEM,55785,48,53.0,20,80,1.0,60,risco baixo robusto
+ITAIM PAULISTA,205295,70,54.0,19,78,4.0,59,risco baixo robusto
+SAUDE,128469,67,55.75,12,85,26.0,73,sensivel as escolhas
+VILA MARIA,108543,69,56.0,29,84,0.0,55,risco baixo robusto
+TUCURUVI,99559,55,57.0,34,78,0.0,44,risco baixo robusto
+FREGUESIA DO O,137240,58,58.0,46,83,0.0,37,risco baixo robusto
+ERMELINO MATARAZZO,112333,59,60.0,24,75,1.0,51,risco baixo robusto
+CIDADE ADEMAR,249218,93,60.5,10,94,5.0,84,risco baixo robusto
+PEDREIRA,163586,93,60.5,10,94,5.0,84,risco baixo robusto
+JABAQUARA,214982,65,62.0,39,87,0.0,48,risco baixo robusto
+JACANA,87329,53,62.0,17,92,2.0,75,risco baixo robusto
+SOCORRO,38051,30,63.0,18,93,4.0,75,risco baixo robusto
+RIO PEQUENO,131631,62,63.0,43,92,0.0,49,risco baixo robusto
+CIDADE TIRADENTES,194177,77,64.5,28,81,0.0,53,risco baixo robusto
+CIDADE DUTRA,182459,66,65.0,20,92,3.0,72,risco baixo robusto
+JARDIM SAO LUIS,259377,60,66.0,34,81,0.0,47,risco baixo robusto
+CAMPO GRANDE,115925,57,67.0,52,96,0.0,44,risco baixo robusto
+CIDADE LIDER,136660,76,67.0,37,83,0.0,46,risco baixo robusto
+MANDAQUI,103665,78,67.5,34,88,0.0,54,risco baixo robusto
+RAPOSO TAVARES,117738,63,69.0,46,77,0.0,31,risco baixo robusto
+IGUATEMI,149700,86,74.0,36,93,0.0,57,risco baixo robusto
+CURSINO,103171,67,76.5,34,85,0.0,51,risco baixo robusto
+CACHOEIRINHA,143366,78,77.25,46,89,0.0,43,risco baixo robusto
+AGUA RASA,85788,71,78.0,61,94,0.0,33,risco baixo robusto
+SAPOPEMBA,266715,91,78.5,35,96,0.0,61,risco baixo robusto
+VILA CURUCA,140673,88,79.0,40,94,0.0,54,risco baixo robusto
+JOSE BONIFACIO,128243,80,81.0,51,89,0.0,38,risco baixo robusto
+JARDIM HELENA,129409,90,83.0,32,95,0.0,63,risco baixo robusto
+JARAGUA,211617,81,83.0,50,92,0.0,42,risco baixo robusto
+ITAQUERA,210960,89,83.0,66,95,0.0,29,risco baixo robusto
+TREMEMBE,196563,64,85.5,25,93,0.0,68,risco baixo robusto
+SAO RAFAEL,148145,86,85.5,60,94,0.0,34,risco baixo robusto
+JARDIM ANGELA,311432,84,86.0,51,93,0.0,42,risco baixo robusto
+PIRITUBA,179724,85,86.0,72,94,0.0,22,risco baixo robusto
+CARRAO,84397,82,86.0,71,95,0.0,24,risco baixo robusto
+VILA FORMOSA,92186,83,86.0,68,96,0.0,28,risco baixo robusto
+PARELHEIROS,153687,72,89.0,20,95,4.0,75,risco baixo robusto
+MARSILAC,11451,72,89.0,20,95,4.0,75,risco baixo robusto
+BRASILANDIA,243273,95,90.0,52,96,0.0,44,risco baixo robusto
+SACOMA,261436,96,90.0,56,96,0.0,40,risco baixo robusto
+GRAJAU,384873,92,94.0,83,96,0.0,13,risco baixo robusto

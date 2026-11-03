@@ -9,7 +9,7 @@ Column selection / cleaning is the next step.
 
 ## `data/processed/listings_aggregated.csv`
 
-One row per Airbnb listing (**42,354 × ~188**). The modeling table.
+One row per Airbnb listing (**42,354 × 192**). The modeling table.
 = all non-empty `listings.csv` columns + `price_num` + every column of
 `distrito_features.csv`, joined on `distrito`.
 
@@ -24,7 +24,7 @@ data dictionary for these. Added:
 | `price_num` | nightly price in BRL, parsed from the `price` string |
 | `distrito` | normalised distrito key (uppercase, no accents) — the join key |
 
-### Distrito features (~109 cols, constant within a distrito)
+### Distrito features (113 cols, constant within a distrito)
 
 **Meta**
 
@@ -60,6 +60,8 @@ only, "Nº DE VÍTIMAS" categories excluded).
 | `crime_violento` | homicídio / latrocínio / lesão seguida de morte / tentativa / estupro / roubo |
 | `crime_total_2024` | same total for 2024 (trend) |
 | `crime_n_dp` | number of DPs mapped into the distrito |
+| `populacao_2022` | residents, IBGE Censo 2022 (SIDRA 9923) |
+| `crime_total_100k` / `crime_violento_100k` / `crime_patrimonial_100k` | the three totals above per 100k residents. Computed on distritos with a DP; distritos without a DP inherit the neighbour's **rate**, never its count (dividing an imputed count by the own population inflates small distritos). `violento` and `patrimonial` overlap (both include all `roubo`), so they are not additive. See `docs/crime-sensitivity.md` |
 | `crime_source` | `dp-direct` or `nearest-imputed` (distritos with no DP inherit the nearest distrito's row; 25 in the 2026-09-08 build, **20** with the reviewed crosswalk once the notebook is rerun) |
 
 **POI (OpenStreetMap, placeholder for Google Places)** — `poi_*` counts and
@@ -72,7 +74,7 @@ missing data rather than a true absence of POIs.
 
 ## `data/processed/distrito_features.csv`
 
-One row per distrito (**96 × ~109**), indexed by `distrito`. The distrito-feature block
+One row per distrito (**96 × 113**), indexed by `distrito`. The distrito-feature block
 above on its own. Secondary view for EDA, maps, Phase 2 spatial checks.
 
 ## Known gaps

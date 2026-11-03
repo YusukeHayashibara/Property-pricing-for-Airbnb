@@ -23,8 +23,13 @@ Source of the list: `obsidian-vault/09 - Spatial Aggregation.md` (checklist at t
         `scripts/fetch_population_distrito.py`). Crime per 100k not applied yet.
 - [ ] Replace OSM POIs with Google Places (needs `GOOGLE_PLACES_API_KEY`);
       check the 6 distritos currently filled with 0 POIs
-- [ ] Add population by distrito (SEADE / IBGE 2022) and compute crime per 100k
-- [ ] Decide the crime basket and the time window ([[ISP]])
+- [x] Add population by distrito (IBGE 2022) and compute crime per 100k (2026-11-03):
+      `crime_*_100k` in the processed tables; imputed distritos inherit the neighbour's
+      rate. Branch `feature/crime-rate-analysis`.
+- [ ] Decide the crime basket and the time window ([[ISP]]). Evidence ready in
+      `docs/crime-sensitivity.md`: window is irrelevant (ρ ≥ 0.99), basket matters only
+      property vs person (ρ = 0.69); denominator (residents vs area) is the other open lever.
+      Needs a team decision.
 - [ ] Choose the FipeZAP deflation base (IPTU 2025 vs Airbnb 2026-06) and apply it
 - [x] Regenerate `listings_aggregated.csv` / `distrito_features.csv` (2026-11-03,
       crosswalk update only; POI, population-based rates, FipeZAP still pending)

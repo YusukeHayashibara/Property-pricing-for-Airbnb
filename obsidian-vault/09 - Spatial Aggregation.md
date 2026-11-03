@@ -234,7 +234,7 @@ The study answered "does the join work". It did, for cost and revenue. From here
 - [ ] Crime time window decided ([[ISP]])
 - [ ] FipeZAP deflation base chosen (IPTU 2025 ↔ Airbnb 2026-06)
 - [ ] Go / no-go on building `src/` (needs a design discussion)
-- [ ] [[ITBI]] and [[ISP]] source notes updated to drop the Rio framing (data + EDA already in repo; only [[05 - Methodology]] decision log updated so far)
+- [x] [[ITBI]] and [[ISP]] source notes updated to drop the Rio framing (2026-11-03)
 
 ### Status (2026-10-28)
 
@@ -245,7 +245,8 @@ The study answered "does the join work". It did, for cost and revenue. From here
 ### Update (2026-11-03) — crosswalk reviewed, population added
 
 - The DP → distrito crosswalk was verified row by row (DP street address and OSM node → point-in-polygon). **22 of 94 rows (23%) of the draft were wrong**; direct DP coverage went from 71 to 76 distritos (20 still imputed). The correction reshuffles the crime ranking (Spearman 0.86 vs the draft; 22 distritos move ≥10 places). Reviewed file: `data/reference/dp_distrito_crosswalk.csv`; full write-up and slide outline: `docs/crime-crosswalk-review.md`.
-- Population by distrito (IBGE Censo 2022): `data/external/populacao_distrito_2022.csv`, 96/96, 11,451,999 inhabitants. Crime per 100k not computed in the processed CSVs yet.
+- Population by distrito (IBGE Censo 2022): `data/external/populacao_distrito_2022.csv`, 96/96, 11,451,999 inhabitants. Crime per 100k is now in the processed tables (`crime_*_100k`, 96 × 113 / 42,354 × 192); imputed distritos inherit the neighbour's *rate*.
+- Sensitivity of the crime ranking to the open choices (basket, window, denominator, A/B, imputation): `docs/crime-sensitivity.md`. Window is irrelevant (ρ ≥ 0.99); basket matters only property vs person (ρ = 0.69); the denominator is the other big lever. With the reviewed crosswalk, treatment A vs B correlate at ρ = 0.94 (draft: 0.88), so the "ρ ≈ 0.79" quoted above is outdated.
 - Still open: imputation rule for DP-less distritos, map check of 13 weaker rows, processed CSVs were regenerated with the new crosswalk (git-ignored, rerun `aggregation.ipynb` locally).
 
 ### Already done (2026-09-07)
