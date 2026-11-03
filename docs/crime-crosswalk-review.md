@@ -88,7 +88,7 @@ Leitura: um erro de 23% no mapeamento reordena o ranking de risco de forma mater
 - **20 distritos seguem sem DP** e são imputados (lista no apêndice). A regra de imputação ainda é provisória (vizinho mais próximo).
 - **Confiança por tipo de evidência:** `reviewed-confirmed` e `reviewed` são as mais fortes. `reviewed-bairro` (12 linhas) e `kept-ambiguous` (1 linha, Vila Clementino, na divisa Saúde/Vila Mariana) merecem conferência no mapa pelo time.
 - Os geocódigos vêm do OpenStreetMap, que pode estar defasado ou impreciso para endereços individuais. As correções de `73 Jaçanã`, `93 Jaguaré` e `97 Americanópolis` têm o nó OSM do DP como única base.
-- Os CSVs em `data/processed/` **ainda não foram regenerados**: refletem o crosswalk antigo até o `aggregation.ipynb` ser reexecutado.
+- `aggregation.ipynb` foi reexecutado de ponta a ponta em 2026-11-03 (76 distritos diretos + 20 imputados, 188 colunas) e os CSVs de `data/processed/` foram regenerados com o crosswalk revisado. Os CSVs não são versionados: quem consome `distrito_features.csv` / `listings_aggregated.csv` precisa reexecutar o notebook.
 
 ## 5. População por distrito (Censo 2022)
 
@@ -104,7 +104,7 @@ Leitura: um erro de 23% no mapeamento reordena o ranking de risco de forma mater
 2. **Rascunho automático.** Geocodificar o nome do bairro da DP. Dois exemplos errados: "Santo Amaro" caiu no Jardim São Luís; "Vila Rica" caiu em Jaraguá, do outro lado da cidade (o certo é Aricanduva).
 3. **Método de verificação.** Diagrama: número da DP → endereço oficial + nó OSM → ponto em polígono → regra de decisão (seção 2).
 4. **Resultado.** 22/94 (23%) erradas. Gráfico: barras por status (seção 3).
-5. **Impacto.** Spearman 0,86; 22 distritos mudam ≥10 posições; Santo Amaro muda 70. Mapa antes/depois do crime por distrito (a gerar depois de reexecutar o notebook).
+5. **Impacto.** Spearman 0,86; 22 distritos mudam ≥10 posições; Santo Amaro muda 70. Mapa antes/depois do crime por distrito (a gerar: o notebook já foi reexecutado).
 6. **Limitações honestas.** Sede ≠ circunscrição; 20 distritos imputados; cinco distritos sem DP próprio.
 7. **População e taxa por 100 mil.** Fonte IBGE 2022, 96/96, 11,45 milhões. Aviso sobre população flutuante no centro.
 8. **Próximos passos.** Regra de imputação; cesta de crimes e janela de tempo; Google Places; deflator FipeZAP.

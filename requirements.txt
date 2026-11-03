@@ -22,6 +22,12 @@ scikit-learn>=1.4
 pyarrow>=14.0
 statsmodels>=0.14
 
+# Image features (notebooks/image_features.ipynb)
+Pillow>=10.0
+torch>=2.0            # inferencia CLIP -- CPU/MPS basta
+transformers>=4.40    # openai/clip-vit-base-patch32
+umap-learn>=0.5       # reducao de dimensao para clustering
+
 # Visualization
 matplotlib>=3.8
 seaborn>=0.13

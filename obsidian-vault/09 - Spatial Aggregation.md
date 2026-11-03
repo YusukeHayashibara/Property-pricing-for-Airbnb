@@ -246,7 +246,7 @@ The study answered "does the join work". It did, for cost and revenue. From here
 
 - The DP → distrito crosswalk was verified row by row (DP street address and OSM node → point-in-polygon). **22 of 94 rows (23%) of the draft were wrong**; direct DP coverage went from 71 to 76 distritos (20 still imputed). The correction reshuffles the crime ranking (Spearman 0.86 vs the draft; 22 distritos move ≥10 places). Reviewed file: `data/reference/dp_distrito_crosswalk.csv`; full write-up and slide outline: `docs/crime-crosswalk-review.md`.
 - Population by distrito (IBGE Censo 2022): `data/external/populacao_distrito_2022.csv`, 96/96, 11,451,999 inhabitants. Crime per 100k not computed in the processed CSVs yet.
-- Still open: imputation rule for DP-less distritos, map check of 13 weaker rows, regenerate the processed CSVs.
+- Still open: imputation rule for DP-less distritos, map check of 13 weaker rows, processed CSVs were regenerated with the new crosswalk (git-ignored, rerun `aggregation.ipynb` locally).
 
 ### Already done (2026-09-07)
 
