@@ -9,6 +9,7 @@
 - Clean and diagnose data quality.
 - **Milestone:** unified, geolocated dataset at microregion level.
 - Progress (2026-09-07): spatial unit chosen — **distrito** (see [[09 - Spatial Aggregation]]); join routes validated via study on branch `feature/spatial-aggregation`. Remaining: reviewed crime crosswalk, Google Places, population by distrito, then the `src/cleaning/` build. Decision to ratify at next sync.
+- Progress (2026-10-28): wide aggregation merged to `main` (PR #3/#4). Next: open items on branch `feature/aggregation-open-items` (see [[09 - Spatial Aggregation]]).
 
 ## Phase 2 — Visual interpretation (Month 2)
 

@@ -226,14 +226,27 @@ The study answered "does the join work". It did, for cost and revenue. From here
 ## What's still missing — checklist
 
 - [ ] Decision ratified by the team
-- [ ] Reviewed `dp,distrito` crosswalk (94 rows) + imputation rule for DP-less distritos
+- [x] Reviewed `dp,distrito` crosswalk (94 rows) — 2026-11-03, see `docs/crime-crosswalk-review.md`
+- [ ] Imputation rule for DP-less distritos (20 left)
 - [ ] `GOOGLE_PLACES_API_KEY` + POI category list + collected Places data for SP
-- [ ] Population by distrito (SEADE / IBGE 2022)
+- [x] Population by distrito (IBGE Censo 2022) — file ready, crime per 100k still to compute
 - [ ] Crime basket decided ([[ISP]])
 - [ ] Crime time window decided ([[ISP]])
 - [ ] FipeZAP deflation base chosen (IPTU 2025 ↔ Airbnb 2026-06)
 - [ ] Go / no-go on building `src/` (needs a design discussion)
 - [ ] [[ITBI]] and [[ISP]] source notes updated to drop the Rio framing (data + EDA already in repo; only [[05 - Methodology]] decision log updated so far)
+
+### Status (2026-10-28)
+
+- Wide aggregation build merged to `main` (PR #3, plus PR #4 with bairro standardization and docs fixes): `notebooks/aggregation.ipynb` → `listings_aggregated.csv` (42,354 × 188) and `distrito_features.csv` (96 × 109). Dictionary: `docs/data-dictionary-aggregation.md`.
+- The checklist above is the **next step**. It is tracked on branch `feature/aggregation-open-items` (focus note: `docs/notes/aggregation-open-items.md`).
+- Known caveats: `aggregation.ipynb` does not use `src/bairros.py` yet; processed CSVs not regenerated since 2026-09-08; 6 distritos have no OSM POIs (filled with 0).
+
+### Update (2026-11-03) — crosswalk reviewed, population added
+
+- The DP → distrito crosswalk was verified row by row (DP street address and OSM node → point-in-polygon). **22 of 94 rows (23%) of the draft were wrong**; direct DP coverage went from 71 to 76 distritos (20 still imputed). The correction reshuffles the crime ranking (Spearman 0.86 vs the draft; 22 distritos move ≥10 places). Reviewed file: `data/reference/dp_distrito_crosswalk.csv`; full write-up and slide outline: `docs/crime-crosswalk-review.md`.
+- Population by distrito (IBGE Censo 2022): `data/external/populacao_distrito_2022.csv`, 96/96, 11,451,999 inhabitants. Crime per 100k not computed in the processed CSVs yet.
+- Still open: imputation rule for DP-less distritos, map check of 13 weaker rows, processed CSVs were regenerated with the new crosswalk (git-ignored, rerun `aggregation.ipynb` locally).
 
 ### Already done (2026-09-07)
 

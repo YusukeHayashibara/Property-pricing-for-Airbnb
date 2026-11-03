@@ -60,7 +60,7 @@ only, "Nº DE VÍTIMAS" categories excluded).
 | `crime_violento` | homicídio / latrocínio / lesão seguida de morte / tentativa / estupro / roubo |
 | `crime_total_2024` | same total for 2024 (trend) |
 | `crime_n_dp` | number of DPs mapped into the distrito |
-| `crime_source` | `dp-direct` or `nearest-imputed` (25 distritos with no DP inherit the nearest distrito's row) |
+| `crime_source` | `dp-direct` or `nearest-imputed` (distritos with no DP inherit the nearest distrito's row; 25 in the 2026-09-08 build, **20** with the reviewed crosswalk once the notebook is rerun) |
 
 **POI (OpenStreetMap, placeholder for Google Places)** — `poi_*` counts and
 `poidens_*` per-km² densities (70). One pair per category:
