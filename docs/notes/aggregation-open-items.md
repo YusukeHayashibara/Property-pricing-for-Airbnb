@@ -8,8 +8,17 @@ Source of the list: `obsidian-vault/09 - Spatial Aggregation.md` (checklist at t
 
 ## Items
 
-- [ ] Review the `dp,distrito` crosswalk (9 `manual-guess` rows) and replace the
-      nearest-distrito imputation for the 25 distritos without a DP
+- [ ] Review the `dp,distrito` crosswalk and replace the nearest-distrito
+      imputation for the distritos without a DP
+  - [x] All 94 DP rows reviewed (2026-11-03): 22 corrected (23%), 58 confirmed,
+        12 kept on a bairro argument, 1 `kept-ambiguous` (Vila Clementino).
+        Method + evidence + slide outline: `docs/crime-crosswalk-review.md`
+        Distritos with a direct DP: 71 → 76 (20 still imputed). CSVs not regenerated yet.
+  - [ ] Imputation rule for the 20 DP-less distritos (still nearest-neighbour)
+  - [ ] Map check of the 13 weaker rows (`reviewed-bairro`, `kept-ambiguous`)
+  - [x] Population by distrito: `data/external/populacao_distrito_2022.csv`
+        (IBGE Censo 2022, SIDRA 9923, 96 distritos, 11,451,999 inhabitants;
+        `scripts/fetch_population_distrito.py`). Crime per 100k not applied yet.
 - [ ] Replace OSM POIs with Google Places (needs `GOOGLE_PLACES_API_KEY`);
       check the 6 distritos currently filled with 0 POIs
 - [ ] Add population by distrito (SEADE / IBGE 2022) and compute crime per 100k
