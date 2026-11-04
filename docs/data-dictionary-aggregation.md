@@ -62,7 +62,7 @@ only, "Nº DE VÍTIMAS" categories excluded).
 | `crime_n_dp` | number of DPs mapped into the distrito |
 | `populacao_2022` | residents, IBGE Censo 2022 (SIDRA 9923) |
 | `crime_total_100k` / `crime_violento_100k` / `crime_patrimonial_100k` | the three totals above per 100k residents. Computed on distritos with a DP; distritos without a DP inherit the neighbour's **rate**, never its count (dividing an imputed count by the own population inflates small distritos). `violento` and `patrimonial` overlap (both include all `roubo`), so they are not additive. See `docs/crime-sensitivity.md` |
-| `crime_source` | `dp-direct` or `nearest-imputed` (distritos with no DP inherit the nearest distrito's row; 25 in the 2026-09-08 build, **20** with the reviewed crosswalk once the notebook is rerun) |
+| `crime_source` | `dp-direct` or `nearest-imputed` (distritos with no DP inherit the nearest distrito's row; 25 in the 2026-09-08 build, **20** with the reviewed crosswalk) |
 
 **POI (OpenStreetMap, placeholder for Google Places)** — `poi_*` counts and
 `poidens_*` per-km² densities (70). One pair per category:

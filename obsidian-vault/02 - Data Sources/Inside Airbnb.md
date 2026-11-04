@@ -12,7 +12,7 @@ Primary source for **Airbnb revenue estimation** and for the property-attribute 
 
 ## EDA summary
 
-See `notebooks/airbnb_analysis.ipynb` for the full exploratory analysis. Headline facts about the current export in `data/data/`:
+See `notebooks/airbnb_analysis.ipynb` for the full exploratory analysis. Headline facts about the current export in `data/raw/Airbnb/`:
 
 - **42,354 listings**, single snapshot, `last_scraped` 2026-06-14/15/16 (`source` = "city scrape").
 - `calendar.csv` covers the 12 months following the scrape (through 2027-06-15); `reviews.csv` goes back to 2011-04-19.
@@ -34,6 +34,6 @@ See `notebooks/airbnb_analysis.ipynb` for the full exploratory analysis. Headlin
 ## Links
 
 - Base URL: configured in `../../.env.example` as `INSIDE_AIRBNB_BASE_URL`
-- Raw data: `data/data/{listings,calendar,reviews,neighbourhoods}.csv`
+- Raw data: `data/raw/Airbnb/{listings,calendar,reviews,neighbourhoods}.csv`
 - Analysis: `notebooks/airbnb_analysis.ipynb`
 - [[05 - Methodology]]
