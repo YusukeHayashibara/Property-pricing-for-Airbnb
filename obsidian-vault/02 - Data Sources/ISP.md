@@ -4,7 +4,9 @@
 
 ## What it provides
 
-Crime statistics by neighborhood / AISP (Área Integrada de Segurança Pública), published by the Instituto de Segurança Pública do São Paulo.
+> #decision (2026-09-07): the São Paulo source is **SSP-SP** (Secretaria da Segurança Pública do Estado de São Paulo). This note keeps the name "ISP" for continuity; the Rio source (ISP-RJ) is no longer used.
+
+Monthly occurrence counts by **Delegacia de Polícia (DP)** and crime type (`NATUREZA2`), for 2024 and 2025 (12 monthly files in `data/raw/ISP/`, consolidated in `data/processed/ISP/dados_criminais_sao_paulo_2025.csv`; 94 DPs in the municipality). EDA: `notebooks/crime_analysis.ipynb`.
 
 ## How we use it
 
@@ -21,11 +23,13 @@ cost → Airbnb revenue → tourist appeal → crime risk → investment score
 
 ## Open questions
 
-- #open-question **Scope mismatch:** the project shifted from Rio de Janeiro to **São Paulo** on 2026-08-14 (see [[01 - Project Overview]], decision log in [[05 - Methodology]]). ISP-RJ is Rio de Janeiro's public security institute and doesn't cover São Paulo — this source needs a São Paulo equivalent for crime statistics (e.g. SSP-SP, TBD — not yet researched). Until replaced, this note and `ISP_RJ_BASE_URL` describe a source the project can no longer use as-is.
-- #open-question Which crime categories are most relevant to Airbnb guest safety perception (violent crime vs. property crime)?
-- #open-question Time window: recent 12 months? Multi-year average?
+- ~~Scope mismatch (Rio vs São Paulo)~~ #decision (2026-09-07): resolved, SSP-SP is the source (see above). `ISP_RJ_BASE_URL` in `.env.example` is obsolete.
+- #open-question Which crime categories are most relevant to guest safety perception: **property vs person**? Measured (2026-11-03): total, `patrimonial` and a street-exposure basket give the same distrito ranking (ρ ≥ 0.995); only crimes against the **person** change it (ρ = 0.69). So the real choice is property vs person; if unsure, keep both as separate features. See `docs/crime-sensitivity.md`.
+- #open-question Time window: measured as irrelevant (2024, 2025, 2024–25 average, each semester: ρ ≥ 0.99), so closing it is cheap. Proposal: full-year 2025.
+- #open-question Denominator: per 100k residents vs per km². Central distritos have few residents and a large floating population, so both inflate them. Real exposure is not measured. See `docs/crime-sensitivity.md`.
 
 ## Links
 
-- Base URL: configured in `../../.env.example` as `ISP_RJ_BASE_URL`
+- Method and sensitivity: `../docs/crime-crosswalk-review.md` (DP → distrito crosswalk, 22 of 94 draft rows corrected) and `../docs/crime-sensitivity.md`
+- Population for rates: IBGE Censo 2022, `data/external/populacao_distrito_2022.csv`
 - [[05 - Methodology]]

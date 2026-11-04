@@ -2,6 +2,8 @@
 
 **Role:** Cost (base)
 
+> #decision (2026-09-07): the São Paulo cost source is **IPTU-SP** (municipal property tax register, `data/raw/IPTU-SP/`, ~3.8M rows), not ITBI transactions. This note keeps the name "ITBI" for continuity. Data.Rio / the Rio ITBI are no longer used. EDA: `notebooks/iptu_analysis.ipynb`.
+
 ## What it provides
 
 Real estate transaction prices (ITBI — Imposto sobre Transmissão de Bens Imóveis), geolocated, published data portal.
@@ -17,12 +19,12 @@ Aggregated to microregion level to estimate **cost per m²**, combined with Fipe
 
 ## Open questions
 
-- #open-question **Scope mismatch:** the project shifted from Rio de Janeiro to **São Paulo** on 2026-08-14 (see [[01 - Project Overview]], decision log in [[05 - Methodology]]). Data.Rio is Rio de Janeiro's municipal open-data portal and does not cover São Paulo — this source needs a São Paulo equivalent for transaction-level ITBI data (e.g. the São Paulo municipal ITBI/GeoSampa data, TBD — not yet researched). Until replaced, this note and `DATA_RIO_BASE_URL` describe a source the project can no longer use as-is.
-- #open-question What's the most recent ITBI dataset vintage available on Data.Rio? (moot if replaced by a São Paulo source)
-- #open-question What geographic granularity does the portal expose (bairro? AISP? custom grid)?
-- Aggregation target settled: normalize to **distrito** via `cep` → distrito join (fallback: `numero_contribuinte` SQL → lot geometry). See [[09 - Spatial Aggregation]].
+- ~~Scope mismatch (Rio vs São Paulo)~~ #decision (2026-09-07): resolved, IPTU-SP is the source. `DATA_RIO_BASE_URL` in `.env.example` is obsolete.
+- Aggregation settled: `numero_contribuinte`[:6] (fiscal sector + block) → GeoSampa `quadra_fiscal` polygon → distrito, covering 99.94% of the rows with no geocoding (the `cep` and `bairro` routes were rejected). See [[09 - Spatial Aggregation]].
+- #open-question **The values are fiscal (`valor_construcao` median ≈ R$ 60/m²), not market prices.** The level needs calibration with [[FipeZAP]] before it can be a cost input. Deflation base (IPTU 2025 vs Airbnb 2026-06) still undecided.
+- IPTU describes the whole property registry (3.8M properties), not transactions or listings for sale. It supports a cost-per-m² signal per distrito, not property-level prices.
 
 ## Links
 
 - [[FipeZAP]] — used to validate/trend-check ITBI prices
-- Portal base URL: configured in `../../.env.example` as `DATA_RIO_BASE_URL`
+- Data: `data/raw/IPTU-SP/iptu_2025.zip` (cleaned copy under `data/processed/`)
