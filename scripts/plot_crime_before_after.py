@@ -14,6 +14,7 @@ Metodologia idêntica à de notebooks/aggregation.ipynb: ocorrências 2025 (sem 
 "Nº DE VÍTIMAS"), média por DP dentro do distrito, e distritos sem DP herdam o valor do
 distrito mais próximo (centroides em EPSG:31983).
 """
+
 import unicodedata
 from pathlib import Path
 
@@ -47,9 +48,7 @@ def crime_by_distrito(xw, col, total_by_dp, centroids):
     direct = x.groupby(col)["t"].sum() / x.groupby(col)["bairro"].nunique()
     have = centroids[centroids.index.isin(direct.index)]
     miss = centroids[~centroids.index.isin(direct.index)]
-    nearest = {
-        d: have.distance(c).idxmin() for d, c in miss.items()
-    }
+    nearest = {d: have.distance(c).idxmin() for d, c in miss.items()}
     value = pd.concat([direct, direct.loc[list(nearest.values())].set_axis(list(nearest))])
     imputed = pd.Series(False, index=centroids.index)
     imputed.loc[list(nearest)] = True
@@ -103,19 +102,26 @@ def main():
         (axes[1], new, new_imp, "Crosswalk revisado (endereço do DP)"),
     ):
         g = dist.assign(v=ser)
-        g.plot(column="v", cmap="YlOrRd", vmin=0, vmax=vmax, ax=ax, edgecolor="white",
-               linewidth=0.3)
+        g.plot(
+            column="v", cmap="YlOrRd", vmin=0, vmax=vmax, ax=ax, edgecolor="white", linewidth=0.3
+        )
         g[imp].plot(ax=ax, facecolor="none", edgecolor="#555555", hatch="///", linewidth=0.2)
         ax.set_title(f"{title}\n{int((~imp).sum())} distritos com DP, {int(imp.sum())} imputados")
         ax.set_axis_off()
     sm = plt.cm.ScalarMappable(cmap="YlOrRd", norm=plt.Normalize(0, vmax))
-    fig.colorbar(sm, ax=axes[:2], fraction=0.025, pad=0.01,
-                 label="ocorrências 2025 por DP (média no distrito)")
+    fig.colorbar(
+        sm,
+        ax=axes[:2],
+        fraction=0.025,
+        pad=0.01,
+        label="ocorrências 2025 por DP (média no distrito)",
+    )
 
     lim = float(delta.abs().max())
     g = dist.assign(d=delta)
-    g.plot(column="d", cmap="RdBu_r", vmin=-lim, vmax=lim, ax=axes[2], edgecolor="white",
-           linewidth=0.3)
+    g.plot(
+        column="d", cmap="RdBu_r", vmin=-lim, vmax=lim, ax=axes[2], edgecolor="white", linewidth=0.3
+    )
     axes[2].set_title("Mudança no ranking de crime\n(vermelho: sobe, azul: desce)")
     axes[2].set_axis_off()
     sm2 = plt.cm.ScalarMappable(cmap="RdBu_r", norm=plt.Normalize(-lim, lim))
@@ -126,8 +132,10 @@ def main():
         fontsize=13,
     )
     fig.savefig(OUT / "crime_crosswalk_antes_depois.png", dpi=150, bbox_inches="tight")
-    print(f"Spearman {rho:.3f} | >=10 posicoes: {int((delta.abs() >= 10).sum())} | "
-          f">=20: {int((delta.abs() >= 20).sum())}")
+    print(
+        f"Spearman {rho:.3f} | >=10 posicoes: {int((delta.abs() >= 10).sum())} | "
+        f">=20: {int((delta.abs() >= 20).sum())}"
+    )
     print(table.head(8).to_string())
 
 

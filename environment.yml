@@ -1,4 +1,4 @@
-name: airbnb-pricing-rio
+name: airbnb-pricing-sp
 channels:
   - conda-forge
 dependencies:

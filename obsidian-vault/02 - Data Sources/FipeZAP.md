@@ -8,7 +8,7 @@ Historical residential price index and trend by region, published jointly by FIP
 
 ## How we use it
 
-Cross-check/validate [[ITBI]] transaction prices and capture price trend over time, since ITBI is transaction-level and can be noisy at fine granularity.
+Calibrate the **level** and trend of the cost source (IPTU-SP fiscal values, see [[ITBI]]), which are not market prices. FipeZAP is city-wide only, so it acts as a single deflator, not a per-distrito input.
 
 ## Open questions
 

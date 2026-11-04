@@ -8,6 +8,8 @@ Developed for **SSC0957 — Practical Data Science II**.
 
 > #decision (2026-08-14): project scope shifted from Rio de Janeiro to **São Paulo** — the Inside Airbnb export the team is working with is a São Paulo snapshot (see [[Inside Airbnb]] EDA). [[ITBI]] and [[ISP]] are Rio-specific and need São Paulo replacements before the cost/risk pipeline steps can run; see the open questions logged in those notes. Decision log: [[05 - Methodology]].
 
+> #decision (2026-09-07): cost source = **IPTU-SP**, risk source = **SSP-SP**, common spatial unit = **distrito** (see [[ITBI]], [[ISP]], [[09 - Spatial Aggregation]]).
+
 ## Framing
 
 Spatial multi-criteria optimization, following the causal chain:

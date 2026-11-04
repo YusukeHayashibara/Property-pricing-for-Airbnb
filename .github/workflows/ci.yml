@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install black isort flake8 pytest pandas numpy
+      - name: black
+        run: black --check src tests scripts conftest.py
+      - name: isort
+        run: isort --check-only src tests scripts conftest.py
+      - name: flake8
+        run: flake8 src tests scripts conftest.py
+      - name: pytest
+        run: pytest -q

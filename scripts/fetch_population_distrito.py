@@ -1,9 +1,12 @@
-"""Population by distrito (IBGE Censo 2022, SIDRA table 9923) -> data/external/populacao_distrito_2022.csv.
+"""Population by distrito (IBGE Censo 2022, SIDRA table 9923).
+
+Output: data/external/populacao_distrito_2022.csv.
 
 Usage (from repo root):  python scripts/fetch_population_distrito.py
 Keys are normalized (upper case, no accents) to match the `distrito` key used in the pipeline,
 and are checked 96/96 against data/external/distrito_municipal.geojson.
 """
+
 import json
 import unicodedata
 import urllib.request
@@ -22,14 +25,18 @@ def norm(s: str) -> str:
 
 def main() -> None:
     raw = json.loads(urllib.request.urlopen(URL).read().decode("utf-8", errors="replace"))[1:]
-    rows = [(r["D1C"], norm(r["D1N"].split(" - ")[0]), int(r["V"]))
-            for r in raw if r["D4N"] == "Total"]
+    rows = [
+        (r["D1C"], norm(r["D1N"].split(" - ")[0]), int(r["V"])) for r in raw if r["D4N"] == "Total"
+    ]
     df = pd.DataFrame(rows, columns=["cd_ibge", "distrito", "populacao_2022"])
-    geo = {norm(f["properties"]["nm_distrito_municipal"])
-           for f in json.load(open(EXT / "distrito_municipal.geojson", encoding="utf-8"))["features"]}
+    geo = {
+        norm(f["properties"]["nm_distrito_municipal"])
+        for f in json.load(open(EXT / "distrito_municipal.geojson", encoding="utf-8"))["features"]
+    }
     assert set(df.distrito) == geo, (geo - set(df.distrito), set(df.distrito) - geo)
     df.sort_values("distrito")[["distrito", "cd_ibge", "populacao_2022"]].to_csv(
-        EXT / "populacao_distrito_2022.csv", index=False)
+        EXT / "populacao_distrito_2022.csv", index=False
+    )
     print(f"{len(df)} distritos, {df.populacao_2022.sum():,} habitantes")
 
 
