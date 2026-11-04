@@ -59,7 +59,7 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
   flake8 src tests scripts conftest.py
   pytest
   ```
-  Settings live in `pyproject.toml` and `.flake8` (line length 100).
+  Settings live in `pyproject.toml` and `.flake8` (line length 100). CI runs the same checks.
 - Notebooks: clear outputs before committing (`jupyter nbconvert --clear-output`) and keep exploratory code in `notebooks/`; promote reusable logic to `src/`.
 
 ## Project structure conventions
