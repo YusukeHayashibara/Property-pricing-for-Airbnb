@@ -16,6 +16,7 @@
 - Maps and charts (PySal, seaborn) arguing representativeness.
 - Exploratory spatial analysis.
 - **Milestone:** exploratory report / checkpoint presentation.
+- Progress (2026-11-03): spatial EDA with the PySAL stack on the real distrito polygons (`notebooks/eda_espacial.ipynb`, write-up and slide outline in `docs/eda-espacial.md`). Global Moran, LISA + FDR, Getis-Ord G*, bivariate Moran, listing-level Moran, `spreg` diagnostics, η² of distrito. Still open: photo/review feature extraction (image and text notebooks on `main`).
 
 ## Phase 3 — Modeling (Month 3)
 
