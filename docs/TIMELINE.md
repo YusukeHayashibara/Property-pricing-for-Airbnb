@@ -13,6 +13,7 @@ gantt
     title Property Pricing for Airbnb - SSC0957
     dateFormat YYYY-MM-DD
     axisFormat %d/%m
+    tickInterval 1month
 
     section Phase 1 - Aggregation
     Unified dataset by distrito      :done, p1, 2026-08-13, 2026-11-03
