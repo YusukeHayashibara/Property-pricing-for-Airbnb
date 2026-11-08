@@ -17,6 +17,7 @@ Saída:
   outputs/crime_sensitivity_robustez.csv  (faixa de posição e robustez por distrito)
   outputs/crime_sensitivity.png
 """
+
 import itertools
 import unicodedata
 from pathlib import Path
@@ -36,15 +37,35 @@ EXT, OUT = Path("data/external"), Path("outputs")
 # Cestas (NATUREZA2). "Nº DE VÍTIMAS ..." é excluído sempre (dupla contagem das ocorrências).
 BASKETS = {
     "total": None,  # tudo, como em aggregation.ipynb
-    "patrimonial": ["FURTO - OUTROS", "FURTO DE VEÍCULO", "ROUBO - OUTROS", "ROUBO DE VEÍCULO",
-                    "ROUBO DE CARGA", "ROUBO A BANCO"],
+    "patrimonial": [
+        "FURTO - OUTROS",
+        "FURTO DE VEÍCULO",
+        "ROUBO - OUTROS",
+        "ROUBO DE VEÍCULO",
+        "ROUBO DE CARGA",
+        "ROUBO A BANCO",
+    ],
     "roubo": ["ROUBO - OUTROS", "ROUBO DE VEÍCULO", "ROUBO DE CARGA", "ROUBO A BANCO"],
-    "pessoa": ["HOMICÍDIO DOLOSO", "LATROCÍNIO", "TENTATIVA DE HOMICÍDIO", "ESTUPRO",
-               "ESTUPRO DE VULNERÁVEL", "LESÃO CORPORAL DOLOSA", "LESÃO CORPORAL SEGUIDA DE MORTE"],
+    "pessoa": [
+        "HOMICÍDIO DOLOSO",
+        "LATROCÍNIO",
+        "TENTATIVA DE HOMICÍDIO",
+        "ESTUPRO",
+        "ESTUPRO DE VULNERÁVEL",
+        "LESÃO CORPORAL DOLOSA",
+        "LESÃO CORPORAL SEGUIDA DE MORTE",
+    ],
     # o que um hóspede a pé enfrenta: furto/roubo comum + agressão + violência sexual + homicídio
-    "rua_hospede": ["FURTO - OUTROS", "ROUBO - OUTROS", "LESÃO CORPORAL DOLOSA", "ESTUPRO",
-                    "ESTUPRO DE VULNERÁVEL", "HOMICÍDIO DOLOSO", "TENTATIVA DE HOMICÍDIO",
-                    "LATROCÍNIO"],
+    "rua_hospede": [
+        "FURTO - OUTROS",
+        "ROUBO - OUTROS",
+        "LESÃO CORPORAL DOLOSA",
+        "ESTUPRO",
+        "ESTUPRO DE VULNERÁVEL",
+        "HOMICÍDIO DOLOSO",
+        "TENTATIVA DE HOMICÍDIO",
+        "LATROCÍNIO",
+    ],
 }
 WINDOWS = {  # (coluna, meses)
     "2025": ("2025", range(1, 13)),
@@ -102,8 +123,12 @@ def to_distrito(counts, xw, geo, treatment, fill, denom=None):
 
 
 def main():
-    cr = pd.read_csv(first_existing("data/processed/ISP/dados_criminais_sao_paulo_2025.csv",
-                                    "data/processed/SSP/dados_criminais_sao_paulo_2025.csv"))
+    cr = pd.read_csv(
+        first_existing(
+            "data/processed/ISP/dados_criminais_sao_paulo_2025.csv",
+            "data/processed/SSP/dados_criminais_sao_paulo_2025.csv",
+        )
+    )
     cr[["2024", "2025"]] = cr[["2024", "2025"]].fillna(0)
     cr["bairro"] = cr["DP"].str.split(" - ").str[-1].str.strip()
     cr = cr[~cr["NATUREZA2"].str.startswith("Nº DE VÍTIMAS")]
@@ -117,13 +142,17 @@ def main():
     area_km2 = geo.geometry.area / 1e6
     assert set(pop.index) == set(geo.index)
 
-    configs = list(itertools.product(BASKETS, WINDOWS, ["100k", "km2", "n"], ["A", "B"],
-                                     ["nearest", "subpref"]))
+    configs = list(
+        itertools.product(
+            BASKETS, WINDOWS, ["100k", "km2", "n"], ["A", "B"], ["nearest", "subpref"]
+        )
+    )
     cols = {}
     for basket, window, denom, treat, fill in configs:
         den = {"100k": pop / 1e5, "km2": area_km2, "n": None}[denom]
         cols["|".join((basket, window, denom, treat, fill))] = to_distrito(
-            dp_counts(cr, basket, window), xw, geo, treat, fill, den)
+            dp_counts(cr, basket, window), xw, geo, treat, fill, den
+        )
     val = pd.DataFrame(cols)
     rank = val.rank(ascending=False)
     base = "|".join(BASELINE)
@@ -133,29 +162,40 @@ def main():
 
     # --- robustez por distrito -------------------------------------------------------------
     top = rate_rank <= 24  # quartil mais perigoso
-    rob = pd.DataFrame({
-        "pop_2022": pop,
-        "posicao_base": rank[base].astype(int),
-        "posicao_mediana": rate_rank.median(axis=1),
-        "posicao_min": rate_rank.min(axis=1).astype(int),
-        "posicao_max": rate_rank.max(axis=1).astype(int),
-        "pct_configs_no_top_quartil": (top.mean(axis=1) * 100).round(0),
-    })
+    rob = pd.DataFrame(
+        {
+            "pop_2022": pop,
+            "posicao_base": rank[base].astype(int),
+            "posicao_mediana": rate_rank.median(axis=1),
+            "posicao_min": rate_rank.min(axis=1).astype(int),
+            "posicao_max": rate_rank.max(axis=1).astype(int),
+            "pct_configs_no_top_quartil": (top.mean(axis=1) * 100).round(0),
+        }
+    )
     rob["faixa"] = rob["posicao_max"] - rob["posicao_min"]
     rob["classe"] = np.select(
         [rob.pct_configs_no_top_quartil >= 90, rob.pct_configs_no_top_quartil <= 10],
-        ["risco alto robusto", "risco baixo robusto"], "sensivel as escolhas")
+        ["risco alto robusto", "risco baixo robusto"],
+        "sensivel as escolhas",
+    )
     OUT.mkdir(exist_ok=True)
-    rob.sort_values("posicao_mediana").to_csv(OUT / "crime_sensitivity_robustez.csv",
-                                              index_label="distrito")
+    rob.sort_values("posicao_mediana").to_csv(
+        OUT / "crime_sensitivity_robustez.csv", index_label="distrito"
+    )
     pd.concat({"valor": val, "posicao": rank}, axis=1).round(2).to_csv(
-        OUT / "crime_sensitivity_ranking.csv", index_label="distrito")
+        OUT / "crime_sensitivity_ranking.csv", index_label="distrito"
+    )
 
     # --- efeito de cada escolha isolada (vs. baseline) -------------------------------------
     b = dict(zip(("basket", "window", "denom", "treat", "fill"), BASELINE))
     rows = []
-    for dim, options in (("basket", BASKETS), ("window", WINDOWS), ("denom", ["100k", "km2", "n"]),
-                         ("treat", ["A", "B"]), ("fill", ["nearest", "subpref"])):
+    for dim, options in (
+        ("basket", BASKETS),
+        ("window", WINDOWS),
+        ("denom", ["100k", "km2", "n"]),
+        ("treat", ["A", "B"]),
+        ("fill", ["nearest", "subpref"]),
+    ):
         for o in options:
             if o == b[dim]:
                 continue
@@ -182,8 +222,12 @@ def main():
     ax[1].set_yticks(y)
     ax[1].set_yticklabels([d.title() for d in pick.index], fontsize=8)
     ax[1].invert_xaxis()
-    ax[1].set_xlabel(f"posição no ranking de crime (1 = mais crime) em {rate_rank.shape[1]} configurações (taxas)")
-    ax[1].set_title("12 distritos de maior e 8 de menor risco mediano:\nfaixa de posição entre as configurações")
+    ax[1].set_xlabel(
+        f"posição no ranking de crime (1 = mais crime), {rate_rank.shape[1]} configurações (taxas)"
+    )
+    ax[1].set_title(
+        "12 distritos de maior e 8 de menor risco mediano:\nfaixa de posição entre as configurações"
+    )
     ax[1].legend(loc="lower right")
     fig.tight_layout()
     fig.savefig(OUT / "crime_sensitivity.png", dpi=140)

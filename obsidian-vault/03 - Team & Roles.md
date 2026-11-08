@@ -4,9 +4,9 @@
 
 | Name | GitHub handle | Primary role | Pipeline area |
 |------|----------------|---------------|----------------|
-| | | | Data collection (ITBI, Data.Rio) |
+| | | | Data collection (IPTU-SP, GeoSampa) |
 | | | | Data collection (Inside Airbnb, FipeZAP) |
-| | | | Data collection (Google Places/TripAdvisor, ISP-RJ) |
+| | | | Data collection (Google Places/TripAdvisor, SSP-SP) |
 | | | | Spatial analysis / PySal |
 | | | | Modeling (scikit-learn hedonic model) |
 | | | | Visualization / reporting |

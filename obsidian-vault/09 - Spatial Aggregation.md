@@ -229,7 +229,7 @@ The study answered "does the join work". It did, for cost and revenue. From here
 - [x] Reviewed `dp,distrito` crosswalk (94 rows) — 2026-11-03, see `docs/crime-crosswalk-review.md`
 - [ ] Imputation rule for DP-less distritos (20 left)
 - [ ] `GOOGLE_PLACES_API_KEY` + POI category list + collected Places data for SP
-- [x] Population by distrito (IBGE Censo 2022) — file ready, crime per 100k still to compute
+- [x] Population by distrito (IBGE Censo 2022) and crime per 100k (`crime_*_100k`) — 2026-11-03
 - [ ] Crime basket decided ([[ISP]])
 - [ ] Crime time window decided ([[ISP]])
 - [ ] FipeZAP deflation base chosen (IPTU 2025 ↔ Airbnb 2026-06)
