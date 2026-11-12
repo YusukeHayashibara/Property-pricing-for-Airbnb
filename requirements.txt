@@ -21,12 +21,16 @@ splot>=1.1
 scikit-learn>=1.4
 pyarrow>=14.0
 statsmodels>=0.14
+scipy>=1.11           # testes (Kruskal, Spearman) usados direto nos notebooks
 
-# Image features (notebooks/image_features.ipynb)
+# Imagens e texto (notebooks/imageAnalysis/, scripts/fetch_*.py)
+# Os modelos sao baixados do Hugging Face na primeira execucao: CLIP ViT-B/32,
+# DINOv2-base e paraphrase-multilingual-MiniLM-L12-v2. CPU/MPS basta.
+# torchvision NAO e necessario: o pre-processamento do DINOv2 e feito a mao.
 Pillow>=10.0
-torch>=2.0            # inferencia CLIP -- CPU/MPS basta
-transformers>=4.40    # openai/clip-vit-base-patch32
-umap-learn>=0.5       # reducao de dimensao para clustering
+torch>=2.0
+transformers>=4.40
+umap-learn>=0.5       # reducao de dimensao para visualizar os clusters
 
 # Visualization
 matplotlib>=3.8

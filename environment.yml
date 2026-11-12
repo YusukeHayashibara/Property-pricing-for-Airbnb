@@ -17,6 +17,12 @@ dependencies:
   - scikit-learn
   - pyarrow
   - statsmodels
+  - scipy
+  # imagens e texto (ver requirements.txt)
+  - pillow
+  - pytorch
+  - transformers
+  - umap-learn
   - matplotlib
   - seaborn
   - jupyterlab

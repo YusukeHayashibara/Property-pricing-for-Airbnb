@@ -21,6 +21,15 @@ Raw, interim, processed and external data are **not versioned** (see `.gitignore
 | `processed/distrito_features.csv` | 1 row per distrito, 113 columns | `notebooks/aggregation.ipynb` |
 | `reference/dp_distrito_crosswalk.csv` | **reviewed** DP → distrito crosswalk, evidence per row | versioned; see `docs/crime-crosswalk-review.md` |
 | `reference/bairros_*.csv` | synonyms and blocklist for bairro standardization | versioned; used by `src/bairros.py` |
+| `raw/Airbnb/photos/{id}.jpg` | cover photos of the pilot (294), longest side 512 px | `python scripts/fetch_airbnb_covers.py` (defaults reproduce the pilot: 300 lowest ids with ≥ 20 reviews and rating ≥ 4.0; 6 return HTTP 404) |
+| `raw/Airbnb/photos_manifest.csv` | one row per downloaded cover: url, status, error, date | `scripts/fetch_airbnb_covers.py` |
+| `raw/Airbnb/photos_amostra/{id}.jpg` | cover photos of the 200-listing stratified sample | `notebooks/imageAnalysis/foto_vs_review.ipynb`. Kept apart from `photos/`, whose content defines the pilot |
+| `raw/StreetView/{id}_{heading}.jpg` | Google Street View, 4 headings (0/90/180/270), 640×640, only "© Google" panoramas | `python scripts/fetch_streetview.py --ids-arquivo …` (needs `GOOGLE_MAPS_API_KEY` in `.env`; billed per image) |
+| `raw/StreetView/manifest.csv` · `uso.csv` | panorama, capture date, distance to the listing, copyright · one row per billed image | `scripts/fetch_streetview.py` |
+| `interim/amostra_reviews.csv` · `amostra_reviews_ids.txt` | the 200-listing stratified sample (group, type) · its ids, one per line | `foto_vs_review.ipynb` (`src/amostra_reviews.py`); the `.txt` feeds `fetch_streetview.py` |
+| `processed/Airbnb/amostra_reviews_textos.csv` | per listing: most negative / positive review, review about the photos, text polarity | `foto_vs_review.ipynb` |
+| `processed/Airbnb/amostra_clusters.csv` | per listing: cluster and UMAP coordinates for covers and Street View, price, adjusted price | `notebooks/imageAnalysis/clusters_amostra.ipynb` |
+| `processed/Airbnb/amostra_clip_*.npz` · `amostra_dino*_streetview.npz` | image embedding caches (CLIP, DINOv2), invalidated when an image file changes | `clusters_amostra.ipynb` |
 
 ## Rebuilding the aggregated tables
 
@@ -31,3 +40,15 @@ Raw, interim, processed and external data are **not versioned** (see `.gitignore
 
 Downstream notebooks (`eda_agregado`, `eda_espacial`, image and text) read these CSVs, so rerun the
 aggregation after pulling changes that touch it.
+
+## Rebuilding the image sample
+
+1. Run `notebooks/imageAnalysis/foto_vs_review.ipynb`: it draws the stratified sample, downloads the
+   covers (replacing listings whose photo returns 404) and writes `interim/amostra_reviews*.csv`.
+2. `python scripts/fetch_streetview.py --ids-arquivo data/interim/amostra_reviews_ids.txt` (and
+   `--revisar` after any change in the panorama filter). The metadata lookup is free; each image is
+   billed, capped by `--max-imagens` per day.
+3. Run `notebooks/imageAnalysis/clusters_amostra.ipynb`.
+
+Coordinates in Inside Airbnb are shifted by up to ~150 m, so Street View shows the surroundings of a
+listing, not its facade.
